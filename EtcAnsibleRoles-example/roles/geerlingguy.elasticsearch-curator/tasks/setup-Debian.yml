@@ -1,3 +1,0 @@
----
-- name: Ensure pip is installed.
-  apt: name=python-pip state=installed

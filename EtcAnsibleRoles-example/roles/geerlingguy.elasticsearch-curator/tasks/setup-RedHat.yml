@@ -1,3 +1,0 @@
----
-- name: Ensure pip is installed.
-  yum: name=python-pip state=installed enablerepo=epel
