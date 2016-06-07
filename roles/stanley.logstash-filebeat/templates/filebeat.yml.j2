@@ -1,0 +1,19 @@
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /var/log/secure
+        - /var/log/message
+      input_type: log
+      document_type: syslog
+  registry_file: /var/lib/filebeat/registry
+output:
+  logstash:
+    hosts: ["{{ filebeat_logstash_server }}:{{ filebeat_logstash_server_port }}"]
+    bulk_max_size: 1024
+    tls:
+      certificate_authorities: ["{{ logstash_ssl_dir }}/{{ filebeat_ssl_certificate_file }}"]
+shipper:
+logging:
+  files:
+    rotateeverybytes: 10485760

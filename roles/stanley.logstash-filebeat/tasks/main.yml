@@ -1,0 +1,29 @@
+---
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+
+- name: Create filebeat configuration file.
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    mode: 0644
+  notify: restart filebeat
+
+- name: Ensure Logstash SSL key pair directory exists.
+  file:
+    path: "{{ logstash_ssl_dir }}"
+    state: directory
+
+- name: Copy SSL key and cert for filebeat.
+  copy:
+    src: "{{ filebeat_ssl_certificate_file }}"
+    dest: "{{ logstash_ssl_dir }}/{{ filebeat_ssl_certificate_file | basename }}"
+    mode: 0644
+  notify: restart filebeat
+
+- name: Ensure filebeat is started and enabled on boot.
+  service: name=filebeat state=started enabled=yes

@@ -1,0 +1,22 @@
+server {
+  listen *:80;
+
+  {% if nginx_site_server_name | length -%}
+  server_name {{ nginx_site_server_name }};
+  {% endif %}
+  
+  {% if nginx_site_custom is defined %}
+    {% for custom in nginx_site_custom %}
+      {{ custom }}
+    {% endfor %}
+  {% endif -%}
+
+  access_log /var/log/nginx/{{ nginx_site_name }}.access.log;
+
+  location / {
+    proxy_pass {{ nginx_site_proxy_pass_scheme }}://{{ nginx_site_proxy_pass_host }}:{{ nginx_site_proxy_pass_port }}/;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_redirect off;
+  }
+}

@@ -1,0 +1,18 @@
+---
+- name: restart nginx
+  service: name=nginx state=restarted
+
+- name: validate nginx configuration
+  command: nginx -t -c /etc/nginx/nginx.conf
+  changed_when: False
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+
+- name: restart kibana
+  service: name=kibana state=restarted
+
+- name: load.sh
+  command: bash load.sh
+  args:
+    chdir: /tmp/beats-dashboards-1.1.0

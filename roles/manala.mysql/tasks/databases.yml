@@ -1,0 +1,14 @@
+---
+
+- name: databases > Install python-mysqldb package
+  apt:
+    name: python-mysqldb
+  when: manala_mysql_databases|length > 0
+
+- name: databases > Create mysql databases
+  mysql_db:
+    name:      "{{ item.name }}"
+    encoding:  "{{ item.encoding|default('utf8') }}"
+    collation: "{{ item.collation|default('utf8_general_ci') }}"
+    state:     "{{ item.state|default(omit) }}"
+  with_items: "{{ manala_mysql_databases }}"

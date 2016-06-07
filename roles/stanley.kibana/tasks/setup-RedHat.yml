@@ -1,0 +1,15 @@
+---
+
+- name: Add kibana repository.
+  copy:
+    src: kibana.repo
+    dest: /etc/yum.repos.d/kibana.repo
+    mode: 0644
+
+- name: Ensure htpasswd-related utilities are installed (RedHat).
+  yum: "name={{ item }} state=present enablerepo=epel"
+  with_items:
+    - httpd-tools
+    - python-passlib
+    - kibana
+  when: ansible_os_family == 'RedHat'

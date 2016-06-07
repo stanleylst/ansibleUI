@@ -1,0 +1,13 @@
+---
+galaxy_info:
+  author: Hector Castro
+  description: An Ansible role for Nginx as a reverse proxy.
+  license: Apache
+  min_ansible_version: 1.2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - web
+dependencies: []

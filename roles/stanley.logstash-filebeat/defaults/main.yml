@@ -1,0 +1,18 @@
+---
+filebeat_logstash_server: localhost
+filebeat_logstash_server_port: 5000
+
+logstash_ssl_dir: /etc/pki/logstash
+filebeat_ssl_certificate_file: logstash-forwarder-example.crt
+
+filebeat_files:
+  - paths:
+      - /var/log/messages
+      - /var/log/auth.log
+    fields:
+      type: syslog
+  # To add more sets of files...
+  # - paths:
+  #     - /var/log/boot.log
+  #   fields:
+  #     type: syslog

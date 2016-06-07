@@ -1,0 +1,7 @@
+---
+nginx_site_name: ""
+nginx_site_server_name: ""
+
+nginx_site_proxy_pass_scheme: http
+nginx_site_proxy_pass_host: "localhost"
+nginx_site_proxy_pass_port: 8080

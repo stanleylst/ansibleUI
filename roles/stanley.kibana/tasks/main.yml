@@ -1,0 +1,101 @@
+---
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Download Kibana.
+  get_url:
+    url: "https://download.elasticsearch.org/kibana/kibana/kibana-{{ kibana_version }}.tar.gz"
+    dest: "{{ workspace }}/kibana-{{ kibana_version }}.tar.gz"
+  when: ansible_os_family == 'Debian'
+
+- name: Expand Kibana.
+  command: >
+    tar -C {{ workspace }} -xvzf {{ workspace }}/kibana-{{ kibana_version }}.tar.gz
+    creates={{ kibana_root }}/config.js
+  when: ansible_os_family == 'Debian'
+
+- name: Ensure www directory exists.
+  file:
+    path: /var/www
+    state: directory
+  when: ansible_os_family == 'Debian'
+
+- name: Move Kibana into place.
+  command: >
+    mv {{ workspace }}/kibana-{{ kibana_version }} {{ kibana_root }}
+    creates={{ kibana_root }}/config.js
+  when: ansible_os_family == 'Debian'
+
+
+- name: Init Kibana.yml .
+  copy:
+    src: kibana.yml
+    dest: "{{ kibana_install_path}}"
+    mode: 0640
+  when: ansible_os_family == 'RedHat'
+
+- name: Init Kibana scripts.
+  copy:
+    src: kibana.init.rh
+    dest: /etc/init.d/
+    mode: 0755
+  notify: restart kibana
+  when: ansible_os_family == 'RedHat'
+
+- name: Copy Kibana configuration.
+  template:
+    src: config.js.j2
+    dest: "{{ kibana_root }}/config.js"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  when: ansible_os_family == 'Debian'
+
+- name: Copy Kibana nginx configuration.
+  template:
+    src: kibana.conf.deb.j2
+    dest: /etc/nginx/conf.d/kibana.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  when: ansible_os_family == 'Debian'
+
+- name: Copy Kibana nginx configuration.
+  template:
+    src: kibana.conf.j2
+    dest: /etc/nginx/conf.d/kibana.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  when: ansible_os_family == 'RedHat'
+
+- name: Create Kibana user account.
+  htpasswd:
+    path: /etc/nginx/conf.d/kibana.htpasswd
+    name: "{{ kibana_username }}"
+    password: "{{ kibana_password }}"
+    owner: root
+    group: "{{ nginx_user }}"
+    mode: 0640
+  notify: restart nginx
+
+- name: Load beat dashboards
+  #get_url:
+  #  url: "https://download.elasticsearch.org/kibana/kibana/kibana-{{ kibana_version }}.tar.gz"
+  #  dest: "{{ workspace }}/kibana-{{ kibana_version }}.tar.gz"
+  copy:
+    src: beats-dashboards-1.1.0.zip
+    dest: /tmp/
+
+- name: Run load.sh
+  command: unzip beats-dashboards-1.1.0.zip
+  args:
+    chdir: /tmp/
+  notify: load.sh
+

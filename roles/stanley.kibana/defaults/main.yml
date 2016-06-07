@@ -1,0 +1,13 @@
+---
+workspace: /root
+
+kibana_root: /var/www/kibana3
+kibana_install_path: /opt/kibana/config/
+kibana_server_name: "logs.magedu.com"
+kibana_elasticsearch_port: 80
+kibana_version: "3.1.3"
+
+kibana_username: kibana
+kibana_password: password
+
+kibana_password_protect_all: false
