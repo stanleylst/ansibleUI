@@ -1,0 +1,21 @@
+---
+- name: Add Elasticsearch GPG key.
+  rpm_key:
+    key: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add logstash-forwarder repository.
+  copy:
+    src: logstashforwarder.repo
+    dest: /etc/yum.repos.d/logstashforwarder.repo
+    mode: 0644
+
+- name: Install logstash-forwarder.
+  yum: pkg=logstash-forwarder state=installed
+
+# See: http://goo.gl/cz9Lnd
+- name: Install logstash-forwarder init script.
+  copy:
+    src: logstash-forwarder.rpm.init
+    dest: /etc/init.d/logstash-forwarder
+    mode: 0655

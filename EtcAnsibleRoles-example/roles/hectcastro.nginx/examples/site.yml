@@ -1,0 +1,11 @@
+---
+# Use something like the following to start an HTTP server to test the role:
+#
+#   vagrant ssh -c 'python -m SimpleHTTPServer'
+#
+# From the VM host, hitting http://localhost:8080 should return a directory
+# listing.
+
+- hosts: all
+  roles:
+    - { role: "hectcastro.nginx", nginx_site_name: "joker", nginx_site_proxy_pass_port: 8000 }

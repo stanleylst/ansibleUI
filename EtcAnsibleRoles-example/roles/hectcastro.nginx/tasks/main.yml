@@ -1,0 +1,29 @@
+---
+- name: Configure the Nginx (Stable) PPA
+  apt_repository: repo=ppa:nginx/stable state=present
+
+- name: Install Nginx
+  apt: pkg=nginx state=present update_cache=yes
+
+- name: Delete default site
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify:
+    - Restart Nginx
+
+- name: Configure Nginx
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify:
+    - Restart Nginx
+
+- name: Configure Nginx site
+  template: src=site.conf.j2
+            dest=/etc/nginx/sites-available/{{ nginx_site_name }}.conf
+  notify:
+    - Restart Nginx
+
+- name: Enable Nginx site
+  file: src=/etc/nginx/sites-available/{{ nginx_site_name }}.conf
+        dest=/etc/nginx/sites-enabled/{{ nginx_site_name }}
+        state=link
+  notify:
+    - Restart Nginx

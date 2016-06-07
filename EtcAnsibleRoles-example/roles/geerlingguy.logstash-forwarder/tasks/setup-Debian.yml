@@ -1,0 +1,28 @@
+---
+- name: Add Elasticsearch apt key.
+  apt_key:
+    url: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add logstash-forwarder repository.
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/logstashforwarder/debian stable main'
+    state: present
+
+- name: Check if logstash-forwarder is already installed.
+  stat: path=/etc/init.d/logstash-forwarder
+  register: logstash_forwarder_installed
+
+- name: Update apt cache if repository just added.
+  apt: update_cache=yes
+  when: logstash_forwarder_installed.stat.exists == false
+
+- name: Install logstash-forwarder.
+  apt: pkg=logstash-forwarder state=present
+
+# See: http://goo.gl/cz9Lnd
+- name: Install logstash-forwarder init script.
+  copy:
+    src: logstash-forwarder.deb.init
+    dest: /etc/init.d/logstash-forwarder
+    mode: 0755

@@ -1,0 +1,17 @@
+---
+java_packages:
+  - java-1.8.0-openjdk
+
+nginx_user: nginx
+nginx_worker_connections: 1024
+nginx_remove_default_vhost: true
+
+kibana_server_name: logs
+kibana_username: kibana
+kibana_password: password
+logstash_monitor_local_syslog: false
+logstash_forwarder_files:
+  - paths:
+      - /var/log/auth.log
+    fields:
+      type: syslog

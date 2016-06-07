@@ -1,0 +1,18 @@
+---
+logstash_forwarder_logstash_server: localhost
+logstash_forwarder_logstash_server_port: 5000
+
+logstash_ssl_dir: /etc/pki/logstash
+logstash_forwarder_ssl_certificate_file: logstash-forwarder-example.crt
+
+logstash_forwarder_files:
+  - paths:
+      - /var/log/messages
+      - /var/log/auth.log
+    fields:
+      type: syslog
+  # To add more sets of files...
+  # - paths:
+  #     - /var/log/boot.log
+  #   fields:
+  #     type: syslog

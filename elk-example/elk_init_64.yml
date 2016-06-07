@@ -1,0 +1,28 @@
+#- hosts: elkserver
+#  gather_facts: yes
+#
+#  vars_files:
+#  - vars/main.yml
+#
+#
+#  roles:
+#    - geerlingguy.java
+#    - geerlingguy.nginx
+#    - geerlingguy.elasticsearch
+#    - geerlingguy.elasticsearch-curator
+#    - geerlingguy.kibana
+#    - geerlingguy.logstash
+#    - geerlingguy.logstash-forwarder
+
+
+
+#- hosts: elkclient
+- hosts: 192.168.37.168
+  gather_facts: yes
+
+  vars_files:
+  - vars/main.yml
+
+
+  roles:
+    - geerlingguy.logstash-forwarder

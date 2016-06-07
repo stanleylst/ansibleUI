@@ -1,0 +1,36 @@
+---
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+# See: http://goo.gl/cz9Lnd
+# - name: Install logstash-forwarder init script.
+#   get_url:
+#     url: https://raw.github.com/elasticsearch/logstash-forwarder/master/logstash-forwarder.init
+#     dest: /etc/init.d/logstash-forwarder
+#     force: yes
+#     mode: 0655
+
+- name: Create logstash-forwarder configuration file.
+  template:
+    src: logstash-forwarder.j2
+    dest: /etc/logstash-forwarder
+    mode: 0644
+  notify: restart logstash-forwarder
+
+- name: Ensure Logstash SSL key pair directory exists.
+  file:
+    path: "{{ logstash_ssl_dir }}"
+    state: directory
+
+- name: Copy SSL key and cert for logstash-forwarder.
+  copy:
+    src: "{{ logstash_forwarder_ssl_certificate_file }}"
+    dest: "{{ logstash_ssl_dir }}/{{ logstash_forwarder_ssl_certificate_file | basename }}"
+    mode: 0644
+  notify: restart logstash-forwarder
+
+- name: Ensure logstash-forwarder is started and enabled on boot.
+  service: name=logstash-forwarder state=started enabled=yes
