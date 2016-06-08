@@ -40,7 +40,7 @@
 - name: Init Kibana scripts.
   copy:
     src: kibana.init.rh
-    dest: /etc/init.d/
+    dest: /etc/init.d/kibana
     mode: 0755
   notify: restart kibana
   when: ansible_os_family == 'RedHat'

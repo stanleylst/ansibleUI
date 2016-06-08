@@ -1,0 +1,20 @@
+- name: Install epel
+  yum: name=/tmp/epel-release-6-8.noarch.rpm  state=present
+
+- name: Install lsyncd
+  yum: name=lsyncd state=latest
+
+- name: Install inotify-tools
+  yum: name=inotify-tools state=latest
+
+- name: restart logio-harvester
+  command: /bin/bash ./logsync.sh
+  args:
+    chdir: "{{ logio_path }}"
+
+- name: restart rsyncd
+  command: killall rsync ; rsync --daemon
+  ignore_errors: yes
+
+- name: restart nginx
+  service: name=nginx state=restarted

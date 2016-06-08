@@ -1,0 +1,12 @@
+---
+
+- name: tran rpm to remote /tmp dirctory
+  copy: src=epel-release-6-8.noarch.rpm dest=/tmp/
+
+
+- name: tran yum.repo epel.repo
+  copy: src=epel.repo dest=/etc/yum.repos.d/
+
+
+- name: Install epel
+  yum: name=/tmp/epel-release-6-8.noarch.rpm  state=present

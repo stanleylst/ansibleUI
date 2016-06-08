@@ -4,12 +4,12 @@
     url: http://packages.elastic.co/GPG-KEY-elasticsearch
     state: present
 
-- name: Add logstash-forwarder repository.
+- name: Add filebeat repository.
   apt_repository:
     repo: 'deb https://packages.elastic.co/beats/apt stable main'
     state: present
 
-- name: Check if logstash-forwarder is already installed.
+- name: Check if filebeat is already installed.
   stat: path=/etc/init.d/filebeat
   register: filebeat_installed
 
@@ -17,12 +17,12 @@
   apt: update_cache=yes
   when: filebeat_installed.stat.exists == false
 
-- name: Install logstash-forwarder.
+- name: Install filebeat.
   apt: pkg=filebeat state=present
 
 # See: http://goo.gl/cz9Lnd
-- name: Install logstash-forwarder init script.
+- name: Install filebeat init script.
   copy:
-    src: logstash-forwarder.deb.init
-    dest: /etc/init.d/logstash-forwarder
+    src: filebeat.deb.init
+    dest: /etc/init.d/filebeat
     mode: 0755

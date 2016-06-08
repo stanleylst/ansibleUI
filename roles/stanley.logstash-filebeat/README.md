@@ -1,6 +1,6 @@
 # Ansible Role: Logstash Forwarder
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-logstash-forwarder.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-logstash-forwarder)
+[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-filebeat.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-filebeat)
 
 An Ansible Role that installs Logstash Forwarder on RedHat/CentOS or Debian/Ubuntu.
 
@@ -17,12 +17,12 @@ Available variables are listed below, along with default values (see `defaults/m
     filebeat_logstash_server: localhost
     filebeat_logstash_server_port: 5000
 
-The central Logstash server/port to which logstash-forwarder should connect.
+The central Logstash server/port to which filebeat should connect.
 
     logstash_ssl_dir: /etc/pki/logstash
-    filebeat_ssl_certificate_file: logstash-forwarder-example.crt
+    filebeat_ssl_certificate_file: filebeat-example.crt
 
-The location and filename of the SSL certificate logstash-forwarder will use to authenticate to the logstash server. For the `filebeat_ssl_certificate_file`, you can provide a path relative to the role directory, or an absolute path to the file.
+The location and filename of the SSL certificate filebeat will use to authenticate to the logstash server. For the `filebeat_ssl_certificate_file`, you can provide a path relative to the role directory, or an absolute path to the file.
 
     filebeat_files:
       - paths:
@@ -31,7 +31,7 @@ The location and filename of the SSL certificate logstash-forwarder will use to 
         fields:
           type: syslog
 
-Configuration of files monitored by logstash-forwarder. You can add more sets of files by adding to the list with another set of files; see `defaults/main.yml` for an example.
+Configuration of files monitored by filebeat. You can add more sets of files by adding to the list with another set of files; see `defaults/main.yml` for an example.
 
 ## Dependencies
 
@@ -41,7 +41,7 @@ None.
 
     - hosts: all
       roles:
-        - { role: geerlingguy.logstash-forwarder }
+        - { role: geerlingguy.filebeat }
 
 ## License
 

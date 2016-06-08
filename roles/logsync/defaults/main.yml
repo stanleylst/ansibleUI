@@ -1,0 +1,12 @@
+logio_path: /data/log.io/
+rsync_server: "192.168.37.159"
+rsync_user: www
+rsync_pwd: "/etc/rsync_client.pwd"
+rsync_module: module_uat
+source_path: /srv/log/
+log_file: /var/log/rsync_client.log
+LogPath: /srv/log/uat/
+LogDir: logdir.txt
+LogioConf: harvester.conf
+SAhome: /data/sa/scripts/
+logio_server_name: logio.magedu.com

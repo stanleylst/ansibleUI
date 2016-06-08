@@ -1,0 +1,8 @@
+---
+# This playbook deploys the whole application stack in this site.  
+
+- hosts: logserver
+  remote_user: root
+
+  roles:
+    - role: logsync

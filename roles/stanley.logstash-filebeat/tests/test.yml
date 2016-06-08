@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-role-logstash-forwarder
+    - ansible-role-filebeat

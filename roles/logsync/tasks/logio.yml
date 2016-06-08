@@ -1,0 +1,36 @@
+---
+
+- name: tran rpm to remote /tmp dirctory
+  copy: src=epel-release-6-8.noarch.rpm dest=/tmp/  
+
+- name: tran yum.repo epel.repo
+  copy: src=epel.repo dest=/etc/yum.repos.d/  
+
+- name: Install epel
+  yum: name=/tmp/epel-release-6-8.noarch.rpm  state=present
+
+- name: Install npm
+  yum: name={{ item }} state=present
+  with_items:
+    - npm
+    - nginx
+
+- name: File Directory
+  file: path={{ logio_path }} owner=root state=directory
+
+- name: Create log.io bash shell
+  template: src=logsync.sh.j2 dest={{ logio_path }}/logsync.sh
+
+
+- name: Install log.io
+  npm: name=log.io path={{ logio_path }} state=present
+
+- name: Auto create logio config
+  template: src=logio.sh.j2 dest={{ logio_path }}/logio.sh
+  notify:
+    - start logio-server
+
+- name: Create Log.io nginx conf
+  template: src=logio.conf.j2 dest=/etc/nginx/conf.d/logio.conf
+  notify:
+    - restart nginx

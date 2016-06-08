@@ -1,27 +1,10 @@
-- hosts: 192.168.37.166
+---
+
+- hosts: elkclient
   gather_facts: yes
 
   vars_files:
   - vars/main.yml
 
-
   roles:
-#    - geerlingguy.java
-#    - geerlingguy.nginx
-#    - geerlingguy.elasticsearch
-    - stanley.kibana
-    - geerlingguy.logstash
     - stanley.logstash-filebeat
-
-
-
-#- hosts: elkclient
-#- hosts: 192.168.37.168
-#  gather_facts: yes
-#
-#  vars_files:
-#  - vars/main.yml
-#
-#
-#  roles:
-#    - stanley.logstash-filebeat

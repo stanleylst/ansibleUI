@@ -1,0 +1,70 @@
+#!/bin/bash
+
+
+. ~/.bash_profile 
+. ~/.bashrc 
+. /etc/bashrc 
+
+LogPath="{{ LogPath }}"
+Tag="king"
+Dtime=`date +"%Y-%m-%d"`
+LogFileD="${Tag}-${Dtime}"
+LogDir="{{ LogDir }}"
+LogioConf="{{ LogioConf }}"
+SAhome="{{ SAhome }}"
+
+
+cd  ${LogPath};
+> ${LogDir} 
+
+###################################生成配置文件
+###生成配置文件头
+cat > ${LogioConf} << EOF
+exports.config = {
+  nodeName: "LogCenter_${Dtime}",
+  logStreams: {
+EOF
+
+###根据目录生成列表
+find ./ -maxdepth 1 -a -type d -a -name "uat*" | awk -F'/' '{print $2}' > /tmp/${LogDir} 
+while read line
+do
+      lineR=`echo ${line}| sed 's/[-.]/_/g'`
+      echo -e "${line}\t${lineR}" >> ${LogDir} 
+
+cat >> ${LogioConf} << EOF
+
+    ${lineR}: [
+      "${LogPath}${line}/${LogFileD}"
+    ],
+EOF
+
+done < /tmp/${LogDir} 
+
+
+###生成配置文件尾
+cat >> ${LogioConf} << EOF
+
+  }, 
+  server: {
+  
+    host: '0.0.0.0',
+    port: 28777
+  }
+}
+
+EOF
+
+
+###################################重启进程
+cp ${LogPath}${LogioConf} /root/.log.io/ -pf
+cd  ${SAhome}
+> ${SAhome}log/logio.log 
+harvester=`ps aux | grep -w  log.io-harvester | grep -v 'grep -w' | awk '{print $2}'`
+[[ "${harvester}" != "" ]] &&  kill -9 ${harvester} 
+cd  /srv/log/uat/node_modules/log.io/bin/;
+nohup ./log.io-harvester &> ${SAhome}log/logio.log &
+
+
+
+

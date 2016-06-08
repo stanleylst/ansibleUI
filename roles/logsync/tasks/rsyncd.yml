@@ -1,0 +1,9 @@
+---
+
+- name: Create rsyncd config
+  copy: src={{ item }} dest=/etc/{{ item }}
+  with_items:
+    - rsyncd.secrets
+    - rsyncd.conf
+  notify:
+    - restart rsyncd

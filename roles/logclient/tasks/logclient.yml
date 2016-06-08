@@ -1,0 +1,21 @@
+---
+
+- name: Get secret passwd file
+  copy: src={{ item }}  dest=/etc/{{ item }}
+  with_items:
+    - rsync_exclude.lst
+    - rsync_client.pwd
+
+- name: Install epel
+  yum: name=/tmp/epel-release-6-8.noarch.rpm  state=present
+
+- name: Install inotify-tools
+  yum: name=inotify-tools state=latest
+
+- name: Directory Check
+  file: path={{ logio_path }} state=directory
+
+- name: 
+  template: src=logsync.sh.j2 dest={{ logio_path }}/logsync.sh
+  notify:
+    - restart logio-harvester
