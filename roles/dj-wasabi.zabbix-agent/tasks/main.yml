@@ -1,0 +1,146 @@
+---
+# tasks file for wdijkerman.zabbix
+
+- name: "Include OS-specific variables"
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "Install the correct repository"
+  include: "RedHat.yml"
+  when: ansible_os_family == "RedHat"
+  tags:
+    - zabbix-agent
+    - init
+    - config
+    - service
+
+- name: "Install the correct repository"
+  include: "Debian.yml"
+  when: ansible_os_family == "Debian"
+  tags:
+    - zabbix-agent
+    - init
+    - config
+    - service
+
+- name: "Install the correct repository"
+  include: "Suse.yml"
+  when: ansible_os_family == "Suse"
+  tags:
+    - zabbix-agent
+    - init
+    - config
+    - service
+
+- name: "Fail invalid specified agent_listeninterface"
+  fail:
+    msg: "The specified network interface does not exist"
+  when: "agent_listeninterface and (agent_listeninterface not in ansible_interfaces)"
+  tags:
+    - zabbix-agent
+    - config
+
+- name: "Get IP of agent_listeninterface when no agent_listenip specified"
+  set_fact:
+    agent_listenip: "{{ hostvars[inventory_hostname]['ansible_' + agent_listeninterface]['ipv4'].address | default('0.0.0.0') }}"
+    agent_ip: "{{ hostvars[inventory_hostname]['ansible_' + agent_listeninterface]['ipv4'].address | default('0.0.0.0') }}"
+  when: "agent_listeninterface and not agent_listenip"
+  tags:
+    - zabbix-agent
+    - config
+    - api
+
+- name: "Default agent_listenip to all when not specified"
+  set_fact:
+    agent_listenip: '0.0.0.0'
+    agent_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4'].address }}"
+  when: "not agent_listenip"
+  tags:
+    - zabbix-agent
+    - config
+
+- name: "Fail invalid specified agent_listenip"
+  fail:
+    msg: "The agent_listenip does not exist"
+  when: "agent_listenip != '0.0.0.0' and agent_listenip not in ansible_all_ipv4_addresses"
+  tags:
+    - zabbix-agent
+    - config
+
+- name: "Configure zabbix-agent"
+  template: src=zabbix_agentd.conf.j2
+            dest=/etc/zabbix/zabbix_agentd.conf
+            owner=root
+            group=root
+            mode=0644
+  notify: restart zabbix-agent
+  become: yes
+  tags:
+    - zabbix-agent
+    - config
+    - init
+
+- name: "Create include dir zabbix-agent"
+  file: path={{ agent_include }}
+        owner=root
+        group=root
+        state=directory
+  become: yes
+  tags:
+    - config
+    - include
+
+- name: "Make sure the zabbix-agent service is running"
+  service: name=zabbix-agent
+           state=started
+  become: yes
+  tags:
+    - init
+    - service
+
+- name: "Create hostgroups"
+  local_action:
+    module: zabbix_group
+    server_url: "{{ zabbix_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_pass }}"
+    host_group: "{{ zabbix_host_groups }}"
+    state: "{{ zabbix_create_hostgroup }}"
+  when: zabbix_api_use
+  tags:
+    - api
+
+- name: "Create a new host or update an existing host's info"
+  local_action:
+    module: zabbix_host
+    server_url: "{{ zabbix_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_pass }}"
+    host_name: "{{ ansible_fqdn }}"
+    host_groups: "{{ zabbix_host_groups }}"
+    link_templates: "{{ zabbix_link_templates }}"
+    status: "{{ zabbix_host_status }}"
+    state: "{{ zabbix_create_host }}"
+    interfaces:
+      - type: 1
+        main: 1
+        useip: "{{ zabbix_useuip }}"
+        ip: "{{ agent_ip }}"
+        dns: "{{ ansible_fqdn }}"
+        port: "{{ agent_listenport }}"
+  when: zabbix_api_use
+  tags:
+    - api
+
+- name: "Updating host configuration with macros"
+  local_action:
+    module: zabbix_hostmacro
+    server_url: "{{ zabbix_url }}"
+    login_user: "{{ zabbix_api_user }}"
+    login_password: "{{ zabbix_api_pass }}"
+    host_name: "{{ ansible_fqdn }}"
+    macro_name: "{{ item.macro_key }}"
+    macro_value: "{{ item.macro_value }}"
+  with_items: zabbix_macros
+  when: zabbix_api_use and zabbix_macros is defined and item.macro_key is defined
+  tags:
+    - api

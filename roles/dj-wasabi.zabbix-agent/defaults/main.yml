@@ -1,0 +1,64 @@
+---
+# defaults file for zabbix-agent
+
+zabbix_version: 3.0
+zabbix_repo: zabbix
+zabbix_agent_package: zabbix-agent
+zabbix_agent_package_state: present # or latest
+agent_server:
+agent_serveractive:
+
+# Zabbix API stuff
+zabbix_api_use: False
+zabbix_url: "http://zabbix.dj-wasabi.local"
+zabbix_api_user: Admin
+zabbix_api_pass: zabbix
+zabbix_create_hostgroup: present  # or absent
+zabbix_create_host: present       # or absent
+zabbix_host_status: enabled       # or disabled
+zabbix_useuip: 1
+zabbix_host_groups:
+  - Linux Servers
+zabbix_link_templates:
+  - Template OS Linux
+
+# Zabbix configuration variables
+agent_pidfile: /var/run/zabbix/zabbix_agentd.pid
+agent_logfile: /var/log/zabbix/zabbix_agentd.log
+agent_logfilesize: 100
+agent_debuglevel: 3
+agent_sourceip:
+agent_enableremotecommands: 0
+agent_logremotecommands: 0
+agent_listenport: 10050
+agent_listeninterface:
+agent_listenip: 
+agent_startagents: 3
+agent_hostname:
+agent_hostnameitem:
+agent_hostmetadata:
+agent_hostmetadataitem:
+agent_refreshactivechecks: 120
+agent_buffersend: 5
+agent_buffersize: 100
+agent_maxlinespersecond: 100
+agent_allowroot: 0
+agent_zabbix_alias:
+agent_timeout: 3
+agent_include: /etc/zabbix/zabbix_agentd.d
+agent_unsafeuserparameters: 0
+agent_userparameter:
+agent_loadmodulepath: ${libdir}/modules
+agent_loadmodule:
+
+# TLS settings
+agent_tlsconnect:
+agent_tlsaccept:
+agent_tlscafile:
+agent_tlscrlfile:
+agent_tlsservercertissuer:
+agent_tlsservercertsubject:
+agent_tlscertfile:
+agent_tlskeyfile:
+agent_tlspskidentity:
+agent_tlspskfile:
