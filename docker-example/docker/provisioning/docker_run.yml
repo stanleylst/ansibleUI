@@ -1,0 +1,24 @@
+# Data containers don't need to be running to be utilized.
+- name: Run a Data container.
+  docker:
+    image: data:data
+    name: data
+    state: present
+ 
+- name: Run a Flask container.
+  docker:
+    image: www:flask
+    name: www
+    state: running
+    command: python /opt/www/index.py
+    ports: "80:80"
+
+- name: Run a MySQL container.
+  docker:
+    image: db:mysql
+    name: db
+    state: running
+    volumes_from: data
+    command: /opt/start-mysql.sh
+    ports: "3306:3306"
+

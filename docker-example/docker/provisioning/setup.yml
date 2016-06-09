@@ -1,0 +1,8 @@
+---
+- name: Install Pip.
+ apt: name=python-pip state=present
+ sudo: yes
+
+- name: Install Docker Python library.
+ pip: name=docker-py state=present
+ sudo: yes

@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  sudo: yes
+
+vars:
+  mysql_users:
+    - name: admin
+      host: "%"
+      password: admin
+      priv: "*.*:ALL"
+
+ roles:
+   - geerlingguy.mysql
+
