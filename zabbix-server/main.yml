@@ -1,0 +1,14 @@
+---
+
+- hosts: zabbix-server
+  become: yes
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: geerlingguy.mysql }
+  
+- hosts: zabbix-server
+  sudo: yes
+  roles:
+    - { role: geerlingguy.apache }
+    - { role: dj-wasabi.zabbix-server, zabbix_url: zabbix.magedu.com, database_type: mysql, database_type_long: mysql }

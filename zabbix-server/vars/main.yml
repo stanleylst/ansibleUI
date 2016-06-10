@@ -1,0 +1,10 @@
+mysql_root_password: magedu@beijing
+mysql_databases:
+  - name: zabbix
+    encoding: utf8
+    collation: utf8_general_ci
+mysql_users:
+  - name: zabbix-server
+    host: "%"
+    password: zabbix-server
+    priv: "example_db.*:ALL"
