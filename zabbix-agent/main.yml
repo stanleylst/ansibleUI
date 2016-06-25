@@ -1,0 +1,12 @@
+---
+
+- hosts: zabbix-agent
+  remote_user: root
+  tasks:
+    - name: Pip install zabbix-api
+      pip: name=zabbix-api
+
+- hosts: zabbix-agent
+  remote_user: root
+  roles:
+     - role: dj-wasabi.zabbix-agent

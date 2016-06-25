@@ -1,0 +1,4 @@
+- hosts: zabbix-proxy
+  sudo: yes
+  roles:
+     - { role: dj-wasabi.zabbix-proxy, zabbix_server_host: 192.168.37.167 }

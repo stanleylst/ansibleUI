@@ -1,0 +1,63 @@
+---
+#
+
+- name: "Debian | Set some facts"
+  set_fact: 
+    datafiles_path: /usr/share/zabbix-proxy-{{ database_type }}
+
+- name: "Debian | Installing repository Debian"
+  apt_repository: repo="deb http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ ansible_distribution_release }} main" 
+                  state=present
+  when: ansible_distribution == "Debian" and zabbix_repo
+
+- name: "Debian | Installing repository Debian"
+  apt_repository: repo="deb-src http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/ {{ ansible_distribution_release }} main" 
+                  state=present
+  when: ansible_distribution == "Debian" and zabbix_repo
+
+- name: "Debian | Installing repository Ubuntu"
+  apt_repository: repo="deb http://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/ {{ ansible_distribution_release }} main" 
+                  state=present
+  when: ansible_distribution == "Ubuntu" and zabbix_repo
+
+- name: "Debian | Installing repository Ubuntu"
+  apt_repository: repo="deb-src http://repo.zabbix.com/zabbix/{{ zabbix_version }}/ubuntu/ {{ ansible_distribution_release }} main"
+                  state=present
+  when: ansible_distribution == "Ubuntu" and zabbix_repo
+
+- name: "Debian | Install gpg key"
+  apt_key: id=79EA5ED4
+           url=http://repo.zabbix.com/zabbix-official-repo.key
+  when: zabbix_repo
+
+- name: "Debian | Installing zabbix-proxy-{{ database_type }}"
+  apt: pkg=zabbix-proxy-{{ database_type }} 
+       state=present 
+       update_cache=yes
+       force=yes
+       cache_valid_time=3600
+
+- name: "Debian | Install Ansible module dependencies"
+  apt: name=python-psycopg2
+       state=present
+  when: zabbix_database_creation
+
+- name: "Debian | Install Mysql Client package"
+  apt: name={{ item }}
+       state=present
+  with_items:
+    - mysql-client
+    - python-mysqldb
+  when: database_type == 'mysql'
+  tags:
+    - zabbix-server
+    - init
+    - database
+
+- name: "Debian | Install PostgreSQL Client package"
+  apt: name=postgresql state=present
+  when: database_type == 'pgsql'
+  tags:
+    - zabbix-server
+    - init
+    - database

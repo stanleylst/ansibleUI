@@ -1,0 +1,93 @@
+# file: mysql/tasks/secure.yml
+
+- name: MySQL | Test whether the root password has already been changed (external hostname).
+  mysql_user:
+    user: root
+    host: "{{item}}"
+    password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: "{{mysql_root_password}}"
+    priv: "*.*:ALL,GRANT"
+  with_items:
+   - "{{ansible_hostname}}"
+   - 127.0.0.1
+   - ::1
+   - localhost
+  register: root_pw_already_set
+  ignore_errors: yes
+  when: ansible_hostname != 'localhost'
+  tags:
+    - change_root_password
+
+- name: MySQL | Changing the root password (external hostname).
+  mysql_user:
+    user: root
+    host: "{{item}}"
+    password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: "{{mysql_default_root_password}}"
+    priv: "*.*:ALL,GRANT"
+  with_items:
+   - "{{ansible_hostname}}"
+   - 127.0.0.1
+   - ::1
+   - localhost
+  when: "root_pw_already_set|failed and ansible_hostname != 'localhost'"
+  tags:
+    - change_root_password
+
+- name: MySQL | Test whether the root password has already been changed (local hostname).
+  mysql_user:
+    user: root
+    host: "{{item}}"
+    password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: "{{mysql_root_password}}"
+    priv: "*.*:ALL,GRANT"
+  with_items:
+   - 127.0.0.1
+   - ::1
+   - localhost
+  register: root_pw_already_set
+  ignore_errors: yes
+  when: ansible_hostname == 'localhost'
+  tags:
+    - change_root_password
+
+- name: MySQL | Changing the root password (local hostname).
+  mysql_user:
+    user: root
+    host: "{{item}}"
+    password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: "{{mysql_default_root_password}}"
+    priv: "*.*:ALL,GRANT"
+  with_items:
+   - 127.0.0.1
+   - ::1
+   - localhost
+  when: "root_pw_already_set|failed and ansible_hostname == 'localhost'"
+  tags:
+    - change_root_password
+
+- name: MySQL | Configure MySql for easy access as root user
+  template:
+    src: root_dot_my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: MySQL | Remove anonymous MySQL server user
+  mysql_user:
+    name: ""
+    host: "{{item}}"
+    state: absent
+  with_items:
+    - "{{ansible_hostname}}"
+    - localhost
+
+- name: MySQL | Remove the MySQL test database
+  mysql_db:
+    name: test
+    state: absent

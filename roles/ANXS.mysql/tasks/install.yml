@@ -1,0 +1,16 @@
+# file: mysql/tasks/install.yml
+
+- name: MySQL | Add APT repository
+  apt_repository: repo={{mysql_ppa}} update_cache=yes
+  when: mysql_ppa != False and mysql_ppa != ""
+
+- name: MySQL | Make sure the MySQL packages are installed
+  apt:
+    pkg: "{{item}}"
+    update_cache: yes
+  with_items: mysql_packages
+
+- name: MySQL | Ensure MySQL is running
+  service:
+    name: mysql
+    state: started

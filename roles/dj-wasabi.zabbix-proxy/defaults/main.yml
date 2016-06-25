@@ -1,0 +1,72 @@
+---
+# defaults file for zabbix-proxy
+
+#
+zabbix_server_host: 192.168.1.1
+zabbix_server_port: 10051
+zabbix_version: 2.4
+zabbix_repo: True
+zabbix_database_creation: True
+manage_database_sqlload: True
+
+# Some role specific vars
+database_type: mysql
+database_type_long: mysql
+#database_type: pgsql
+#database_type_long: postgresql
+
+# zabbix-proxy specifc vars
+proxy_mode: 0
+proxy_listenport: 10051
+proxy_sourceip:
+proxy_logfile: /var/log/zabbix/zabbix_proxy.log
+proxy_logfilesize: 10
+proxy_debuglevel: 3
+proxy_pidfile: /var/run/zabbix/zabbix_proxy.pid
+proxy_dbhost: localhost
+proxy_dbname: zabbix_proxy
+proxy_dbschema:
+proxy_dbuser: zabbix_proxy
+proxy_dbpassword: zabbix_proxy
+proxy_dbsocket:
+proxy_dbport:
+proxy_localbuffer: 0
+proxy_offlinebuffer: 1
+proxy_heartbeatfrequency: 60
+proxy_configfrequency: 3600
+proxy_datasenderfrequency: 1
+proxy_startpollers: 5
+proxy_startipmipollers: 0
+proxy_startpollersunreachable: 1
+proxy_starttrappers: 5
+proxy_startpingers: 1
+proxy_startdiscoverers: 1
+proxy_starthttppollers: 1
+proxy_javagateway:
+proxy_javagatewayport: 10052
+proxy_startjavapollers: 5
+proxy_startvmwarecollector: 0
+proxy_vmwarefrequency: 60
+proxy_vmwarecachesize: 8
+proxy_snmptrapperfile: /tmp/zabbix_traps.tmp
+proxy_snmptrapper: 0
+proxy_listenip:
+proxy_housekeepingfrequency: 1
+proxy_casesize: 8
+proxy_startdbsyncers: 4
+proxy_historycachesize: 8
+proxy_historytextcachesize: 16
+proxy_timeout: 3
+proxy_trappertimeout: 300
+proxy_unreachableperiod: 45
+proxy_unavaliabledelay: 60
+proxy_unreachabedelay: 15
+proxy_externalscripts: /usr/lib/zabbix/externalscripts
+proxy_fpinglocation: /usr/sbin/fping
+proxy_fping6location: /usr/sbin/fping6
+proxy_sshkeylocation: 
+proxy_loglowqueries: 0
+proxy_tmpdir: /tmp
+proxy_allowroot: 0
+proxy_include: /etc/zabbix/zabbix_proxy.conf.d
+proxy_loadmodulepath: ${libdir}/modules

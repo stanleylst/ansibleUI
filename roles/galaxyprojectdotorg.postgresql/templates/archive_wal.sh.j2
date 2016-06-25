@@ -1,0 +1,74 @@
+#!/bin/sh
+##
+## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
+##
+#
+# this is invoked by postgres directly, and should be set as the
+# archive_command thusly:
+#   archive_command = '/path/to/backup/bin/archive_wal.sh "%p" "%f"'
+
+full_file=$1
+file=$2
+server=`hostname`
+
+active_dir='{{ postgresql_backup_active_dir }}'
+backup_dir="{{ postgresql_backup_dir }}/current/wal"
+mutex="{{ postgresql_backup_local_dir }}/walmutex"
+mailto='{{ postgresql_backup_mail_recipient }}'
+mutex_attempts=50
+
+[ '{{ postgresql_backup_remote_rsync_path | default("None") }}' != 'None' ] && remote_rsync='--rsync-path={{ postgresql_backup_remote_rsync_path }}' || remote_rsync=''
+
+handler()
+{
+    command=$@
+    out=`$command 2>&1`
+    ret=$?
+    if [ $ret -ne 0 ]; then
+        (echo "execuing $command failed with code $ret:" ; echo "$out") | mail -s "$server: WAL archive failed" $mailto
+        rm -f $mutex
+        exit 1
+    else
+        if [ -n "$out" ]; then
+            echo "$out"
+        fi
+    fi
+}
+
+attempt=0
+
+[ ! -d `dirname $mutex` ] && mkdir -p `dirname $mutex`
+
+while [ -f $mutex ]; do
+    attempt=`expr $attempt + 1`
+    if [ $attempt -gt $mutex_attempts ]; then
+        echo "archive of WAL $file failed, timed out waiting for mutex from `cat $mutex`" | mail -s "$server: WAL archive failed" $mailto
+        exit 1
+    fi
+    sleep 5
+done
+
+echo "archive-WAL $$" > $mutex
+
+# If rsync outputs anything to stdout, the destination already existed, which should not happen
+if [ -n "`handler rsync $remote_rsync --ignore-existing -ptg --info=skip1 $full_file $backup_dir`" ]; then
+    echo "$backup_dir/$file already exists, overwriting is not allowed" | mail -s "$server: WAL archive failed" $mailto
+    rm -f $mutex
+    exit 1
+fi
+
+# create an empty directory for --delete
+empty=`handler mktemp -d {{ postgresql_backup_local_dir }}/emptyXXXXXX`
+
+# clear the active directory
+handler rsync $remote_rsync -rptg --delete $empty/ $active_dir
+
+# remove the temp empty dir
+handler rmdir $empty
+
+# debug
+#echo "archive of WAL $file succeeded" | mail -s "$server: WAL archive succeeded" $mailto
+
+# exit normally
+rm -f $mutex
+exit 0

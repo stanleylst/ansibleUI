@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: Werner Dijkerman
+  description: Installing and maintaining zabbix-proxy for RedHat/Debian/Ubuntu.
+  company: myCompany.Dotcom
+  license: license (GPLv3)
+  min_ansible_version: 1.4
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
+  - name: Ubuntu
+    versions:
+    - lucid
+    - precise
+    - trusty
+  - name: Debian
+    versions:
+    - squeeze
+    - wheezy
+  categories:
+  - monitoring
+  
