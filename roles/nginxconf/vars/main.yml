@@ -1,0 +1,11 @@
+---
+
+nginx_server_name: www.magedu.com
+nginx_web_root: /opt/magedu/
+nginx_proxies:  
+  - name: suspicious
+    location: /
+    port: 2368
+  - name: suspicious-api
+    location: /api
+    port: 3000

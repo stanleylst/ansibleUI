@@ -1,0 +1,13 @@
+---
+# These tasks are responsible for update schema
+# the version control system. 
+
+- name: supervisord processes
+  register: var=SupervisordProcessesStop
+  supervisorctl: name='king_worker:' state=stopped #stopped  #restarted
+
+- debug: var=SupervisordProcessesStop
+
+
+- name: knight processes
+  supervisorctl: name='knight' state=stopped #stopped  #restarted

@@ -1,0 +1,39 @@
+---
+# This playbook deploys the whole application stack in this site.  
+
+- hosts: localhost
+  remote_user: root
+
+  roles:
+    - { role: java_git_comm, tags: [ 'update_pre', 'pkbuild', 'git' ] }
+    - { role: java_create_tar_comm, tags: [ 'update_pre', 'pkbuild', 'git', 'create_tar'] }
+
+- hosts: JavaOrder
+  remote_user: root
+
+  roles:
+    - { role: java_updatefile_comm, tags: [ 'update_pre', 'updatefile' ] }
+#    - { role: tomcat, tags: [ 'process', 'tomcat' ] }
+
+
+- hosts: JavaOrder
+  remote_user: root
+  tasks:
+
+    - name: tomcat restart(stop)
+      tags: pstop
+      register: TomcatStop
+      shell: ./order_shutdown.sh  chdir=/opt/
+
+    - debug: var=TomcatStop
+
+    - name: sleeping for five seconds 
+      tags: process
+      command: sleep 5
+
+    - name: tomcat restart(start)
+      tags: pstart
+      register: TomcatStart
+      shell: ./order_startup.sh chdir=/opt/
+
+    - debug: var=TomcatStart

@@ -1,0 +1,5 @@
+---
+
+
+- name: tempalte transfer example
+  template: src=order.j2 dest=/data/{{ PROJECT }}/order.conf

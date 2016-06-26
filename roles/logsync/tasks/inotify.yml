@@ -1,0 +1,23 @@
+---
+# Install inotify
+
+- name: dir create
+  file: path=/etc/rsyncd.d/  state=directory
+
+- name: file tran
+  copy: src=rsync_client.pwd dest=/etc/rsync_client.pwd mode=600
+
+- name: file tran
+  copy: src=rsync_exclude.lst dest=/etc/rsyncd.d/rsync_exclude.lst
+
+- name: inotify install
+  yum: name=inotify-tools state=latest
+
+
+- name: running logsync.sh
+  script: logsync.sh
+
+#- name: install intotify and running logssync.sh
+#  yum: name=inotify-tools state=latest
+#  notify:
+#  - run logsync.sh

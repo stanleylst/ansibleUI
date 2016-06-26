@@ -1,0 +1,15 @@
+---
+# These tasks are responsible for update schema
+# the version control system. 
+
+- name: supervisord processes
+  register: SupervisordProcessesRestart
+  command: supervisorctl reload
+  notify:
+  - sleep 10
+  - stop tailfatal
+
+#- name: supervisord stop tailfatal
+#  supervisorctl: name='tailfatal' state=stopped #stopped  #restarted
+
+- debug: var=SupervisordProcessesRestart

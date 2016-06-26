@@ -1,0 +1,18 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: Git init before git pull
+  command: /usr/bin/git fetch
+  args:
+      chdir: "{{ java_settle_package_dir }}{{ project }}-release-{{ git_commit }}/{{ project }}"
+
+- name: Git reset
+  command: /usr/bin/git reset --hard
+  args:
+      chdir: "{{ java_settle_package_dir }}{{ project }}-release-{{ git_commit }}/{{ project }}"
+
+- name: Git checkout
+  command: /usr/bin/git checkout {{ git_commit }}
+  args:
+      chdir: "{{ java_settle_package_dir }}{{ project }}-release-{{ git_commit }}/{{ project }}"

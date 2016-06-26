@@ -1,0 +1,9 @@
+---
+
+- include: ../../git/tasks/create_dir.yml
+- include: ../../git/tasks/static_git_pull.yml
+- include: ../../git/tasks/git_checkout.yml
+- include: ../../git/tasks/static_git_pull.yml
+#- include: ../../composer/tasks/composer_install.yml
+#- include: create_tar.yml
+

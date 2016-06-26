@@ -1,0 +1,9 @@
+---
+# These tasks are responsible for update schema
+# the version control system. 
+
+- name: ErpOrder process stop
+  register: ErpOrderStop
+  supervisorctl: name='king_worker:erp_order_q' state=stopped #stopped  #restarted
+
+- debug: var=ErpOrderStop

@@ -1,0 +1,7 @@
+---
+# crond rebuild
+# the version control system. 
+
+- name: History Record
+  copy: src=HistoryRecord.sh dest=/etc/profile.d/HistoryRecord.sh  mode="u+x"
+  #script: HistoryRecord.sh

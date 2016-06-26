@@ -1,0 +1,5 @@
+---
+
+- name: ubuntu install httpd
+  remote_user: stanley
+  apt: name=mini-httpd state=present

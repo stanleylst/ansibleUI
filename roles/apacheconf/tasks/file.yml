@@ -1,0 +1,5 @@
+---
+
+- name: Apache.conf.j2 tempalte transfer example
+  template: src=apache.conf.j2 dest=/etc/httpd/apache.conf.template
+

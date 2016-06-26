@@ -1,0 +1,5 @@
+{% if PORT is defined %}
+bind-address=0.0.0.0:{{ PORT }}
+{% else %}
+bind-address=0.0.0.0:3306
+{% endif %}

@@ -1,0 +1,7 @@
+---
+# These tasks are responsible for copying the latest dev/production code from
+# the version control system. 
+
+- name: link file {{ project }}
+  file: src={{ java_package_dir }}/java-{{ project }}-release-{{ git_commit }}/java-{{ project }} dest={{ java_project_dir }}-{{ project }} owner=www group=www state=link
+

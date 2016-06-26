@@ -1,0 +1,27 @@
+---
+# These tasks are responsible for copying the latest dev/production code from
+# the version control system. 
+
+- name: Tran tgz package to remote server
+  copy: src={{ package_dir }}{{ flag }}-{{ project }}-{{ git_commit }}.release{{ item }} dest={{ package_dir }} owner=www group=www
+  with_items:
+    - .tgz
+    - .tgz.sha1 
+
+- name: md5num check
+  register: md5check
+  command: /usr/bin/shasum  {{ flag }}-{{ project }}-{{ git_commit }}.release.tgz
+  args:
+    chdir: "{{ package_dir }}"
+
+- name: cat md5sum file
+  register: md5file
+  command: /bin/cat {{ flag }}-{{ project }}-{{ git_commit }}.release.tgz.sha1
+  args:
+    chdir: "{{ package_dir }}"
+  
+- name: untar package
+  unarchive: src={{ package_dir }}{{ flag }}-{{ project }}-{{ git_commit }}.release.tgz dest={{ package_dir }} owner=www group=www copy=yes
+  failed_when: md5check.stdout != md5file.stdout
+    
+

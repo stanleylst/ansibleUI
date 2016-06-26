@@ -1,0 +1,7 @@
+---
+# crond crontrl
+# the version control system. 
+
+- name: crond stop
+  service: name=crond enabled=yes state=stopped #stopped
+

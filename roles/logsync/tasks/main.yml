@@ -1,5 +1,5 @@
 ---
 
-- include: logio.yml
-- include: rsyncd.yml
+#- include: lsyncd.yml
+- include: inotify.yml
 

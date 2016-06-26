@@ -1,0 +1,8 @@
+---
+# supervisord stop tailfatal
+#
+- name: sleep 10
+  command: sleep 10
+
+- name: stop tailfatal
+  supervisorctl: name='tailfatal' state=stopped #stopped  #restarted

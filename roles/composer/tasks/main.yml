@@ -1,0 +1,4 @@
+---
+
+- include: composer_install.yml
+

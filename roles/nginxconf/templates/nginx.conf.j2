@@ -1,0 +1,67 @@
+{% if nginx_use_proxy %}
+{% for proxy in nginx_proxies %}
+
+upstream {{ proxy.name }} {  
+    #server 127.0.0.1:{{ proxy.port }};
+    server {{ ansible_eth0.ipv4.address }}:{{ proxy.port }};
+}
+
+{% endfor %}
+{% endif %}
+
+server {  
+    listen 80;
+    server_name {{ nginx_server_name }};
+    access_log off;
+    error_log /dev/null crit;
+
+    rewrite ^ https://$server_name$request_uri? permanent;
+}
+
+server {  
+    listen 443 ssl;
+    server_name {{ nginx_server_name }};
+
+    ssl_certificate /etc/nginx/ssl/{{ nginx_ssl_cert_name }};
+    ssl_certificate_key /etc/nginx/ssl/{{ nginx_ssl_cert_key }};
+
+    root {{ nginx_web_root }};
+    index index.html index.html;
+
+{% if nginx_use_auth %}
+
+    auth_basic            "Restricted";
+    auth_basic_user_file  /etc/nginx/{{project_name}}.htpasswd;
+
+{% endif %}
+
+{% if nginx_use_proxy %}
+{% for proxy in nginx_proxies %}
+
+    location {{ proxy.location }} {
+
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto http;
+        proxy_set_header X-Url-Scheme $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_redirect off;
+
+        proxy_pass http://{{ proxy.name }};
+        break;
+
+    }
+
+{% endfor %}
+{% endif %}
+
+{% if nginx_server_static %}
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+{% endif %}
+
+}

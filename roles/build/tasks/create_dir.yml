@@ -1,0 +1,7 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: create dir
+  file: path={{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }} owner=www group=www mode=0755 recurse=yes state=directory
+

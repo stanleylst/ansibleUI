@@ -1,0 +1,12 @@
+---
+# These tasks are responsible for composer install
+#
+
+- name: gw shortcut key
+  lineinfile: dest=/etc/profile line='alias gwc=\"cd /srv/www/king-gw/vendor/king/core/src/Config/\"'
+
+- name: cp shortcut key
+  lineinfile: dest=/etc/profile line='alias cpc=\"cd /srv/www/king-cp/vendor/king/core/src/Config/"'
+
+- name: ansible shortcut key
+  lineinfile: dest=/etc/profile line='alias ans=\"cd /data/sa/scripts/fab2ansible/\"'

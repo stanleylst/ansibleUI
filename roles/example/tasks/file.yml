@@ -1,0 +1,16 @@
+---
+
+- name: file change example
+  #copy: src=MAGEDU.PPT  dest=/data/magedu.ppt owner=stanley group=stanley
+  copy: src={{ item.src }}  dest=/data/{{ item.dest }} owner=stanley group=stanley
+  with_items:
+    - { src: 'MAGEDU.PPT', dest: 'magedu.ppt' }
+    - { src: 'STANLEY.PPT', dest: 'stanley.ppt' }
+
+- name: order.j2 tempalte transfer example
+  template: src=order.j2 dest=/data/{{ PROJECT }}/order.conf
+
+
+- name: id.j2 tempalte transfer example
+  template: src=id.j2 dest=/data/id_host.txt
+

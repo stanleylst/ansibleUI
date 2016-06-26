@@ -1,0 +1,5 @@
+---
+
+- name: centos install httpd
+  remote_user: root
+  yum: name=httpd state=latest

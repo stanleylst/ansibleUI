@@ -1,0 +1,11 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: create {{ java_project_dir }}-{{ project }} directory
+  file: path={{ java_package_dir }}/java-{{ project }}-release-{{ git_commit }}/java-{{ project }} owner=www group=www mode=0755 recurse=yes state=directory
+
+
+- name: create {{ java_project_dir }} dir
+  #shell: mkdir /opt
+  file: path=/opt owner=www group=www mode=0755  state=directory #recurse=yes 

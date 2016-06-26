@@ -1,0 +1,5 @@
+{% for node in groups["db"] %}
+{{ node | join("") }}:5672
+{% if not loop.last %}
+{% endif %}
+{% endfor %}

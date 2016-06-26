@@ -1,0 +1,13 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: tar package
+  command: /bin/tar -czf "{{ flag }}"-"{{ project }}"-"{{ git_commit }}".release.tgz  "{{ project }}-release-{{ git_commit }}"/"{{ flag }}"-"{{ project }}"
+  args:
+      chdir: "{{ package_dir }}"
+
+- name: create md5sum
+  shell: shasum "{{ flag }}"-"{{ project }}"-"{{ git_commit }}".release.tgz > "{{ flag }}"-"{{ project }}"-"{{ git_commit }}".release.tgz.sha1 
+  args:
+      chdir: "{{ package_dir }}"

@@ -1,0 +1,17 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+
+- name: Git pull
+  shell: echo {{ item }}
+  with_items:
+    - "{{ repository_java }}-{{ project }}.git"
+
+
+
+- name: Git pull
+  register: git
+  git: repo={{ repository_java }}-{{ project }}.git dest={{ java_package_dir }}/java-{{ project }}-release-{{ git_commit }}/java-{{ project }}  version="{{ git_commit }}" force=yes
+
+- debug: var=repo

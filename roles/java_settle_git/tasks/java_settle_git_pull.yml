@@ -1,0 +1,7 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: Git pull
+  git: repo={{ repository_java_settle }} dest={{ java_settle_package_dir }}{{ project }}-release-{{ git_commit }}/{{ project }}  version="{{ git_commit }}" force=yes
+

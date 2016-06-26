@@ -1,0 +1,4 @@
+---
+
+- include: tomcat_restart.yml
+

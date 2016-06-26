@@ -1,0 +1,6 @@
+---
+
+apache_vhosts:
+  - {servername: "apache.magedu.com", documentroot: "/data/magedu/"}
+  - {servername: "apache.magedu.otherdomain.com", documentroot: "/data/otherdomain/", serveradmin: "stanley@magedu.com"}
+

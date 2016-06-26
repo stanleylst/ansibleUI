@@ -1,0 +1,56 @@
+---
+# Variables listed here are applicable to all host groups
+
+flag: king
+javaflag: java
+tech: php
+damn: '-'
+git: git
+svn: svn
+package_dir: /srv/deploy/
+project_dir: /srv/www/
+project: cp
+git_commit: 084295f64f4cb953744a8dd71d9abe1c549a0109
+king_gw_path: /srv/www/king-gw/
+http_port: 80
+repository_git: git@git.magedu.com:php/king-gw.git
+repository_gw: git@git.magedu.com:php/king-gw.git
+repository_cp: git@git.magedu.com:php/king-cp.git
+repository_fcp: git@git.magedu.com:php/king-fcp.git
+repository_fs: git@git.magedu.com:frontend/mainSite_product.git
+repository_backend: git@git.magedu.com:php/king-backend.git
+repository: git@git.magedu.com:php/
+damn_repository: 'ephah.cf:'
+
+repository_h5: git@git.magedu.com:frontend/mainSite_H5.git
+repository_jg: git@git.magedu.com:frontend/institution.git
+repository_static: git@git.magedu.com:frontend/staticPage.git
+repository_my: git@git.magedu.com:frontend/mainSite_user.git
+
+
+# java project
+java_settle_package_dir: /opt/java/
+java_settle_project_dir: /opt/webapps
+java_package_dir: /opt/java
+java_project_dir: /opt/webapps
+repository_java: git@git.magedu.com:release-java/release
+
+## repository_java_settle: git@git.magedu.com:release-java/release-settle.git
+repository_java_settle: git@git.magedu.com:release-java/release-settle.git
+repository_java_settle_uat: git@git.magedu.com:release-java/uat-settle.git
+repository_java_order: git@git.magedu.com:release-java/release-order.git
+repository_java_message: git@git.magedu.com:release-java/release-message.git
+
+## 1.6 version new project
+repository_java_search: git@git.magedu.com:release-java/release-search.git
+repository_java_databiz: git@git.magedu.com:release-java/release-databiz.git
+repository_java_hsapp: git@git.magedu.com:release-java/release-hsapp.git
+repository_java_paysystem: git@git.magedu.com:release-java/release-paysystem.git
+repository_java_search-master: git@git.magedu.com:release-java/release-search-master.git
+repository_java_app: git@git.magedu.com:release-java/release-app.git
+repository_java_econtract: git@git.magedu.com:release-java/release-econtract.git
+
+
+#PROJECT: "JAVA"
+#SWITCH: "ON"
+#DBPORT: "3306"

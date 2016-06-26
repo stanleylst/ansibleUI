@@ -1,0 +1,24 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: tar package
+  command: /bin/tar -czf java-"{{ project }}"-"{{ git_commit }}".release.tgz  java-"{{ project }}-release-{{ git_commit }}"/java-"{{ project }}"
+  args:
+      chdir: "{{ java_package_dir }}"
+
+
+- debug: msg=tarfilename
+
+- name: create md5sum
+  shell: shasum java-"{{ project }}"-"{{ git_commit }}".release.tgz > java-"{{ project }}"-"{{ git_commit }}".release.tgz.sha1 
+  args:
+      chdir: "{{ java_package_dir }}"
+
+
+
+- name: tar package locate
+  shell: echo {{ item }}
+  with_items:
+    - "{{ java_project_dir }}-{{ project }}/java-{{ project }}-{{ git_commit }}.release.tgz"
+    - "{{ java_project_dir }}-{{ project }}/java-{{ project }}-{{ git_commit }}.release.tgz.sha1"

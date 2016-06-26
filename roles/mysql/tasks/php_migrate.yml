@@ -1,0 +1,41 @@
+---
+# These tasks are responsible for update schema
+# the version control system. 
+
+#- hostname: worker
+#- hostname: mytest
+#  tasks:
+- name: db schema check
+  register: dbupdate
+  #failed_when: dbupdate.stdout != ""
+  shell: php korm.php schema migrate
+  args:
+    chdir: "{{ project_dir }}{{ flag }}-{{ project }}/vendor/king/orm/bin/"
+
+#- debug: var=dbupdate
+
+- name: db remote backup
+  register: dbbackup
+  #shell: python /opt/ndbc/agent/mysql/dump_backup.py -p 1331 --node-type=slave
+  shell: python /opt/ndbc/agent/mysql/dump_backup.py -p 1331 --pro_name='ifa' --cls_name='cls1' --node-type=slave
+  run_once: true
+  delegate_to: mysqlM  ##这里请留意需要在/etc/hosts添加对应关系 10.3.33.26 mysqlM;有可能是 Ansible Bug
+  #delegate_to: 10.3.33.26
+  when: dbupdate.stdout != ""
+
+- debug: var=dbbackup.stderr
+  when: dbupdate.stdout != ""
+
+#- name: db update promote
+#  fail: msg="***Mysql Update*** \Login:10.21.40.51 \cd {{ project_dir }}{{ flag }}-{{ project }}/vendor/king/orm/bin/;php korm.php schema migrate --exec"
+#  when: dbupdate.stdout != ""
+
+
+- name: db update 
+  register: dbexec
+  shell: php korm.php schema migrate --exec
+  when: dbupdate.stdout != ""
+  args:
+    chdir: "{{ project_dir }}{{ flag }}-{{ project }}/vendor/king/orm/bin/"
+
+- debug: var=dbexec

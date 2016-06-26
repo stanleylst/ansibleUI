@@ -1,0 +1,8 @@
+---
+# These tasks are responsible for git checkout ref variable patch
+#
+
+- name: Git pull
+  git: repo={{ git }}@{{ git }}.{{ damn_repository }}{{ tech }}/{{ flag }}{{ damn }}{{ project }}.{{ git }} dest={{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }}  version="{{ git_commit }}" force=yes
+  #git: repo={{ repository_git }} dest={{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }}  version="{{ git_commit }}" force=yes
+

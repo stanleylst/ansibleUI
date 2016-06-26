@@ -1,0 +1,34 @@
+---
+# These tasks are responsible for grunt install
+#
+
+- name: grunt build
+  register: gruntOutput
+  #command: /usr/bin/grunt build --force
+  command: grunt build --force
+  args:
+      chdir: "{{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }}"
+  #failed_when: "'Done, without errors' not in gruntOutput.stdout_lines"
+  #failed_when: "'Done, without errors.' in gruntOutput.stdout_lines"
+  #failed_when: gruntOutput.stdout_lines.find('Done, without errors') != -1
+  #failed_when: gruntOutput.stdout_lines.find('Done, without errors') == 0
+
+
+
+#- name: grunt output stderr
+#  shell: echo "{{ item }}"
+#  with_items: gruntOutput.stderr
+#  when: gruntOutput.rc == 0
+
+
+#- name: grunt output stdout
+#  shell: echo "{{ item }}"
+#  with_items: gruntOutput.stdout
+#  when: gruntOutput.rc == 0
+
+#- debug: var=gruntOutput.stdout
+
+- name: grunt output stdout_lines
+  shell: echo "{{ item }}"
+  with_items: gruntOutput.stdout_lines
+  when: gruntOutput.rc == 0

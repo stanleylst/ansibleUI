@@ -9,20 +9,3 @@
 
 - name: run logsync.sh
   script: logsync.sh
-
-- name: restart logio-harvester
-  command: /bin/bash ./logsync.sh
-  args:
-    chdir: "{{ logio_path }}/node_modules/log.io/bin/"
-
-- name: start logio-server
-  command: ./log.io-server
-  args:
-    chdir: "{{ logio_path }}/node_modules/log.io/bin/"
-
-- name: restart rsyncd
-  command: killall rsync ; rsync --daemon
-  ignore_errors: yes
-
-- name: restart nginx
-  service: name=nginx state=restarted

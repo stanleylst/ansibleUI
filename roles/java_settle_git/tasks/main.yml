@@ -1,0 +1,7 @@
+---
+
+- include: java_settle_create_dir.yml
+- include: java_settle_git_pull.yml
+- include: java_settle_git_checkout.yml
+- include: java_settle_git_pull.yml
+

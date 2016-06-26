@@ -1,0 +1,33 @@
+---
+# This playbook deploys the whole application stack in this site.  
+
+- hosts: localhost
+  remote_user: root
+
+  roles:
+    - { role: git, tags: [ 'update_pre', 'pkbuild', 'git' ] }
+    - { role: composer, tags: [ 'update_pre', 'pkbuild', 'composer'] }
+    - { role: create_tar, tags: [ 'update_pre', 'pkbuild', 'create_tar'] }
+
+- name: configure and deploy web groupserver
+  hosts: webworker
+  remote_user: root
+
+  roles:
+    - { role: updatefile, tags: [ 'update_pre', 'updatefile' ] }
+
+- name: configure and deploy worker groupserver
+  hosts: worker
+  remote_user: root
+
+  roles:
+#     - { role: mysql, tags: [ 'update_db', 'mysql' ] }
+     - { role: crond , tags: [ 'process', 'crond' ] }
+     - { role: supervisord, tags: [ 'process', 'supervisord' ] }
+
+- name: restart php
+  hosts: web
+  remote_user: root
+
+  roles:
+    - { role: php, tags: [ 'process', 'php' ] }

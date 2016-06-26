@@ -1,0 +1,10 @@
+---
+# These tasks are responsible for update schema
+# the version control system. 
+
+- name: supervisord processes
+  command: supervisorctl reload
+
+
+- name: supervisord stop tailfatal
+  supervisorctl: name='king_worker:tailfatal' state=stopped #stopped  #restarted

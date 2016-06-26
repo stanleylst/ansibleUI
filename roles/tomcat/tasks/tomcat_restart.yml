@@ -1,0 +1,9 @@
+---
+# These tasks are responsible for update schema
+# the version control system. 
+
+#- hostname: worker
+#- hostname: mytest
+#  tasks:
+- name: java tomcat restart
+  service: name=tomcat state=restarted

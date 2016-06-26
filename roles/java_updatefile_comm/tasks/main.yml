@@ -1,0 +1,4 @@
+---
+
+- include: tran_file.yml
+- include: ../../linkfile/tasks/java_link_comm.yml

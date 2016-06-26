@@ -1,0 +1,35 @@
+---
+# These tasks are responsible for composer install
+#
+
+- name: Composer install
+  register: composerOutput
+  shell: /usr/local/bin/composer install -o
+  args:
+      chdir: "{{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }}"
+
+#- debug: var=composerOutput
+#- debug: var=composerOutput.stdout_lines
+#- debug: var=composerOutput.stderr_lines
+
+#- debug: msg="{{ composerOutput.stderr }}"
+#- debug: msg="{{ composerOutput.stdout }}"
+#- debug: msg="{{ composerOutput.stdout_lines }}"
+
+- name: composer output stderr
+  shell: echo "{{ item }}"
+  with_items: composerOutput.stderr
+  when: composerOutput.rc == 0
+
+
+- name: composer output stdout
+  shell: echo "{{ item }}"
+  with_items: composerOutput.stdout
+  when: composerOutput.rc == 0
+
+
+- name: composer output stdout_lines
+  shell: echo "{{ item }}"
+  with_items: composerOutput.stdout_lines
+  when: composerOutput.rc == 0
+

@@ -1,0 +1,27 @@
+---
+# These tasks are responsible for npm install
+#
+
+- name: npm install 
+  register: npmOutput
+  npm: path={{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }}
+  #command: npm i
+  #args:
+  #  chdir: "{{ package_dir }}{{ project }}-release-{{ git_commit }}/{{ flag }}-{{ project }}"
+
+- debug: var=npmOutput
+
+#- name: npm output stderr
+#  shell: echo {{ item }}
+#  with_items: npmOutput.stderr
+#
+#
+#- name: npm output stdout
+#  shell: echo {{ item }}
+#  with_items: npmOutput.stdout
+#
+#
+#- name: npm output stdout_lines
+#  shell: echo {{ item }}
+#  with_items: npmOutput.stdout_lines
+##  when: npmOutput.rc == 0
