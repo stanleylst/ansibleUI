@@ -5,7 +5,7 @@
 zabbix_url: zabbix.magedu.com
 zabbix_url_aliases: []
 zabbix_version: 3.0
-zabbix_timezone: Asia/Shangha
+zabbix_timezone: Asia/Shanghai
 zabbix_repo: True
 zabbix_vhost: True
 zabbix_web: true

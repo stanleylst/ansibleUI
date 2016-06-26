@@ -10,9 +10,9 @@ agent_serveractive:
 
 # Zabbix API stuff
 zabbix_api_use: False
-zabbix_url: "http://zabbix.dj-wasabi.local"
+zabbix_url: "http://zabbix.magedu.com"
 zabbix_api_user: Admin
-zabbix_api_pass: zabbix
+zabbix_api_pass: magedu
 zabbix_create_hostgroup: present  # or absent
 zabbix_create_host: present       # or absent
 zabbix_host_status: enabled       # or disabled

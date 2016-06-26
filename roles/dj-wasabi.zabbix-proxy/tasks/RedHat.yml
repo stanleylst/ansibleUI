@@ -3,7 +3,8 @@
 
 - name: "RedHat | Set some facts"
   set_fact: 
-    datafiles_path: "/usr/share/doc/zabbix-proxy-{{ database_type }}-{{ zabbix_version }}*/create"
+    #datafiles_path: "/usr/share/doc/zabbix-proxy-{{ database_type }}-{{ zabbix_version }}*/create"
+    datafiles_path: "/usr/share/doc/zabbix-proxy-{{ database_type }}-{{ zabbix_version }}*"
 
 - name: "RedHat | Install basic repo file"
   template: src=rhel.repo.j2

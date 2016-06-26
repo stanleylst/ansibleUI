@@ -1,0 +1,15 @@
+# Place this file in your /etc/yum.repos.d/ directory
+
+[epel-httpd24]
+name=httpd-2.4 scl
+baseurl=http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-$releasever/$basearch/
+enabled=1
+skip_if_unavailable=1
+gpgcheck=0
+
+[epel-httpd24-source]
+name=httpd-2.4 scl - Source
+baseurl=http://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-$releasever/SRPMS
+enabled=0
+skip_if_unavailable=1
+gpgcheck=0

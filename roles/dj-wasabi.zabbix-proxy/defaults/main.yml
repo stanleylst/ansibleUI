@@ -2,9 +2,9 @@
 # defaults file for zabbix-proxy
 
 #
-zabbix_server_host: 192.168.1.1
+zabbix_server_host: 192.168.37.167
 zabbix_server_port: 10051
-zabbix_version: 2.4
+zabbix_version: 3.0
 zabbix_repo: True
 zabbix_database_creation: True
 manage_database_sqlload: True

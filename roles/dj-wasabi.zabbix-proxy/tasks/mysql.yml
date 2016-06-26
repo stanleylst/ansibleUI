@@ -14,7 +14,7 @@
   when: zabbix_database_creation
 
 - name: "MySQL | Importing schema file"
-  shell: "cd {{ datafiles_path }} && mysql -u {{ proxy_dbuser }} -p{{ proxy_dbpassword }} -D {{ proxy_dbname }} < schema.sql && touch /etc/zabbix/schema.done"
+  shell: "cd {{ datafiles_path }}/ && mysql -u {{ proxy_dbuser }} -p{{ proxy_dbpassword }} -D {{ proxy_dbname }} < schema.sql && touch /etc/zabbix/schema.done"
   args:
     creates: /etc/zabbix/schema.done
   when: manage_database_sqlload and ansible_os_family == "RedHat"

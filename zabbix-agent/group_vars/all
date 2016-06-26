@@ -1,9 +1,9 @@
 agent_server: 192.168.37.167
 agent_serveractive: 192.168.37.167
 zabbix_url: http://zabbix.magedu.com
-zabbix_api_use: true
+zabbix_api_use: False
 zabbix_api_user: Admin
-zabbix_api_pass: zabbix
+zabbix_api_pass: magedu
 zabbix_create_host: present
 zabbix_host_groups:
   - Linux Servers

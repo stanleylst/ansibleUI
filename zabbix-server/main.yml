@@ -1,6 +1,51 @@
 ---
 
 - hosts: zabbix-server
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: Create Repo
+      copy: src={{ item }} dest=/etc/yum.repo.d/{{ item }}
+      with_items:
+        - epel-httpd24.repo
+        - remi-php70.repo
+        - remi.repo
+        - remi-safe.rep
+
+    - name: Install PHP56
+      yum: name={{ item }} state=present
+      with_items:
+        - php56.x86_64
+        - php56-php-bcmath.x86_64
+        - php56-php-cli.x86_64
+        - php56-php-common.x86_64
+        - php56-php-devel.x86_64
+        - php56-php-embedded.x86_64
+        - php56-php-fpm.x86_64
+        - php56-php-gd.x86_64
+        - php56-php-mbstring.x86_64
+        - php56-php-mcrypt.x86_64
+        - php56-php-mysqlnd.x86_64
+        - php56-php-odbc.x86_64
+        - php56-php-opcache.x86_64
+        - php56-php-pdo.x86_64
+        - php56-php-pear.noarch
+        - php56-php-pecl-jsonc.x86_64
+        - php56-php-pecl-jsonc-devel.x86_64
+        - php56-php-pecl-zip.x86_64
+        - php56-php-pgsql.x86_64
+        - php56-php-process.x86_64
+        - php56-php-xml.x86_64
+        - php56-runtime.x86_64
+
+    - name: Install Apache24
+      yum: name={{ item }} state=present
+      with_items:
+        - httpd24
+        - httpd24-httpd
+        - httpd24-httpd-tools
+
+- hosts: zabbix-server
   become: yes
   vars_files:
     - vars/main.yml
