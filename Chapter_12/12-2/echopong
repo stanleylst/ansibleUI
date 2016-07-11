@@ -1,0 +1,7 @@
+#!/usr/bin/python
+from ansible.module_utils.basic import *
+import os
+module = AnsibleModule(argument_spec = dict())
+os.system('echo pong')
+result = dict(echo='pong')
+module.exit_json(**result)

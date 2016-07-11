@@ -1,0 +1,12 @@
+- name: 10_4_echopong_with_vars_return_5
+  hosts: localhost
+  tasks:
+
+    - name: echo pongpong
+      echo: args="pongpong"
+      register: res
+
+    - name: check_code
+      debug: msg=ok
+      when: res.pass_code == 1
+

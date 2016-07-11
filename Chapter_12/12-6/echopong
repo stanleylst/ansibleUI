@@ -1,0 +1,15 @@
+#!/usr/bin/python
+from ansible.module_utils.basic import *
+import os
+module = AnsibleModule(
+        argument_spec = dict(
+            args=dict(required=True)),
+            supports_check_mode=True
+        )   
+args = module.params['args']
+rc = os.system('echo {0}'.format(args))
+if rc == 0:
+    result = dict(echo=args, changed=True)     
+    module.exit_json(**result)                    
+else:
+    module.fail_json(msg="errors happened")

@@ -1,0 +1,10 @@
+- name: test
+  hosts: localhost         # 请加上/etc/ansible/hosts加上
+                           # localhost ansible_connection=local
+  tasks:
+
+    - name: echo pongpong
+      echo: args="pongpong"
+      register: res
+    - debug: var=res
+

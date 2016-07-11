@@ -1,0 +1,10 @@
+#!/usr/bin/python
+from ansible.module_utils.basic import *
+import os
+module = AnsibleModule(
+        argument_spec = dict(
+            args=dict(required=True)),
+        )   
+args = module.params['args']
+os.system('echo {0}'.format(args))
+result = dict(echo=args, changed=True, failed=True)
