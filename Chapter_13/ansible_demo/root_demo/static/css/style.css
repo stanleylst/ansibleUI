@@ -1,0 +1,221 @@
+/* tags */
+body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { 
+    font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+
+
+.tag {
+    cursor: pointer;
+    margin-right: 3px;
+    margin-left: 3px;
+    margin-bottom: 7px;
+    overflow: hidden;
+    padding-right: 16px;
+    padding-left: 16px;
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    -webkit-transition: 0.14s linear;
+    -moz-transition: 0.14s linear;
+    -o-transition: 0.14s linear;
+    transition: 0.14s linear;
+    -webkit-backface-visibility: hidden;
+}
+
+.tag:hover {
+    color: #ffffff;
+    padding-left: 8px;
+    padding-right: 24px;
+}
+
+.tag:hover .remove-tag {
+    opacity: 1;
+    display: block;
+}
+
+.remove-tag {
+    bottom: 0;
+    cursor: pointer;
+    opacity: 0;
+    padding: 5px 5px 0 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    text-decoration: none;
+    z-index: 2;
+    display: none;
+}
+
+.tipper {
+    position: relative;
+}
+
+a.remove-tipper {
+    left: 230px;
+    position: absolute;
+    top: 5px;
+}
+
+.tag-add {
+    background-color: #d6dbdf;
+    border-radius: 3px !important;
+    color: #ffffff;
+    cursor: pointer;
+    margin-bottom: 5px;
+    padding: 2px 6px !important;
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    -webkit-transition: 0.25s;
+    -moz-transition: 0.25s;
+    -o-transition: 0.25s;
+    transition: 0.25s;
+    -webkit-backface-visibility: hidden;
+}
+
+.tag-add:hover {
+    background-color: #1abc9c !important;
+}
+.slider-bar{
+    display:block; width:10px; background-color:none; position:relative;
+    cursor:pointer
+}
+
+.slider ,.slider-bar{
+    height:15px;
+    cursor:pointer
+}
+
+
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.handpointer{
+    cursor:pointer
+}
+
+.addsongbg {
+  background: url('../images/music_upload_bg.jpg') 0 0 repeat;
+}
+
+.addsongtitle {
+  background: url('../images/music_upload_bg3.jpg') 0 0 repeat;
+}
+
+.userlistbg {
+  background: url('../images/music_upload_bg2.jpg') 0 0 repeat;
+}
+
+.bg_login { 
+        background: url('../images/gsdk_img/blue.jpg') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+.awai_bg {
+        background: url('../images/awaiBG.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+.release_request_bg {
+        background: url('../images/simple_bg.png') no-repeat center center fixed;
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        overflow:hidden;
+        height:1%; 
+}
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 200px;
+    height: 65px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px;
+}
+.drop-box2 {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 70%;
+    height: 100px;
+    padding-top: 25px;
+    margin: 10px;
+}
+.dragover {
+    border: 5px dashed blue;
+}
+pre {
+    overflow-x: auto;
+}
+
+pre code {
+    word-wrap: normal;
+    white-space: pre;
+}
+
+.ace_editor {
+  height: 180px;
+}
+
+#demo-general .ace_editor {
+  height: 250px;
+}
+
+#demo-mode-changing .ace_editor {
+  height: 300px;
+}
+.scrollable-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+.tooltip-inner {
+    white-space:pre;
+    max-width:none;
+}
+
+.hidden-scrollbar {
+    overflow:hidden;
+    text-align:justify;    
+    padding-left: 0px;
+}
+
+.hidden-scrollbar .inner {
+    height: 1000px;
+    overflow:auto;
+    padding: 0px;
+    margin:0px -300px 0px 0px;
+    padding-right:300px; /* Samakan dengan besar margin negatif */
+}
+
+.save_bg {
+        background: url('../images/balls.gif') no-repeat center;
+        width: 10px;
+        height: 10px;
+}

@@ -1,0 +1,21 @@
+<div class="col-md-12" ng-controller="demo_test2_ctrl">
+    <div class="form-group col-md-offset-3">
+        <br/>
+        <label class="col-md-3 control-label">请输入要创建的文件:</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control"  ng-model="filename" />
+        </div>
+    </div>
+    <div class="row col-md-12">
+        <br />
+        <button class="btn btn btn-primary col-md-offset-5" ng-click="touch_file(filename)">使用ansible创建文件</button>
+    </div>
+    <br/>
+    <div class="col-md-12">
+        <p class="col-md-offset-3">(( main_msg ))</p>
+        <br/>
+        <label class="col-md-offset-3 control-label" ng-if="ansible_log">ansible日志:</label>
+        <br/>
+        <textarea class="form-control" rows="20" ng-model="ansible_log" ng-if="ansible_log"></textarea>
+    </div>
+</div>

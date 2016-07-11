@@ -1,0 +1,5 @@
+- hosts: localhost
+
+  tasks:
+  - name: touch file
+    shell: touch /tmp_1/{{filename}}
