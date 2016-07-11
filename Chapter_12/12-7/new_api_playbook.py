@@ -20,7 +20,7 @@ Options = namedtuple('Options', ['listtags', 'listtasks', 'listhosts', 'syntax',
 options = Options(listtags=False, listtasks=False, listhosts=False, syntax=False, connection='ssh', module_path=None, forks=100, remote_user='deploy',private_key_file=None, ssh_common_args=None, ssh_extra_args=None, sftp_extra_args=None, scp_extra_args=None, become=True, become_method=None, become_user='deploy', verbosity=None, check=False)
 
 playbook_path = 'test.yml'
-variable_manager.extra_vars = {"aa": "xx", "bb": [{"xx": "1"}]} # This can accomodate various other command line arguments.`
+variable_manager.extra_vars = {"args": "pong",} # This can accomodate various other command line arguments.`
 if not os.path.exists(playbook_path):
     print '[INFO] The playbook does not exist'
     sys.exit()
