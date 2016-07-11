@@ -17,17 +17,17 @@ class DemoViewSet(viewsets.ModelViewSet):
     serializer_class = DemoSerializer
     queryset = Demo.objects.all()
 
-    @list_route(methods=['get', 'post'])                      
+    @list_route(methods=['get', 'post'])
     def touch(self, request):
         os.system('touch /tmp/abc')
         return Response({'msg': '/tmp/abc has been touched'})
 
-    @list_route(methods=['get', 'post'])                      
+    @list_route(methods=['get', 'post'])
     def touch_2(self, request):
         os.system('ansible localhost -a "touch /tmp/bcf"')
         return Response({'msg': '/tmp/bcf has been touched'})
 
-    @list_route(methods=['get', 'post'])                   
+    @list_route(methods=['get', 'post'])
     def touch_3(self, request):
         bits = 'ansible localhost -a "touch /tmp1/eee"'
         (status, output) = commands.getstatusoutput(bits)
@@ -36,7 +36,7 @@ class DemoViewSet(viewsets.ModelViewSet):
         return Response({'msg': '/tmp/eee has been touched', 'output': output})
 
 
-    @list_route(methods=['get', 'post'])                      
+    @list_route(methods=['get', 'post'])
     def touch_4(self, request):
         bits = 'ansible localhost -a "touch /tmp1/eee"|tee -a /tmp/ansible.log'
         (status, output) = commands.getstatusoutput(bits)
