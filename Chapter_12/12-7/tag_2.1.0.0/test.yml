@@ -1,0 +1,10 @@
+- name: test
+  hosts: localhost         # 请加上/etc/ansible/hosts加上
+  gather_facts: False      # localhost ansible_connection=local
+  tasks:
+
+    - name: echo pongpong
+      shell: bash -c "echo 123; sleep 10"
+      register: res
+    - debug: var=res
+
