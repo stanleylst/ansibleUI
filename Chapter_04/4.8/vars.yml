@@ -1,0 +1,11 @@
+---
+# 中文测试The directory into which Solr will be downloaded for setup.
+download_dir: /tmp
+tomcat_version: 8.0.35
+tomcat_dir: /opt/tomcat
+
+# The directory inside which Solr will be installed.
+solr_dir: /opt/solr
+
+# Solr version and download information.
+solr_version: 6.1.0

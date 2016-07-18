@@ -1,0 +1,34 @@
+ --- 
+#对所有主机进行基础配置
+- hosts: all
+  sudo: true
+  roles:
+      - security
+      - logging
+      - firewall
+#配置web主机
+- hosts: servercheck-web
+  roles:
+      - nginx
+      - php
+      - servercheck-web
+#配置数据库主机
+- hosts: servercheck-db
+  roles:
+      - pgsql
+      - db-tuning
+#配置日志主机
+- hosts: servercheck-log
+  roles:
+      - java
+      - elasticsearch
+      - logstash
+      - kibana
+# 配置备份主机
+- hosts: servercheck-backup
+  roles:
+       - backup
+#配置Node.js主机
+- hosts: servercheck-nodejs
+  roles:
+       - servercheck-node

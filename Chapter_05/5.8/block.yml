@@ -1,0 +1,19 @@
+---
+- hosts: web
+  tasks:
+    # Install and configure Apache on RedHat/CentOS hosts.
+    - block:
+        - yum: name=httpd state=present
+        - template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
+        - service: name=httpd state=started enabled=yes
+    when: ansible_os_family == 'RedHat'
+    sudo: yes
+
+    # Install and configure Apache on Debian/Ubuntu hosts.
+    - block:
+        - apt: name=apache2 state=present
+        - template: src=httpd.conf.j2 dest=/etc/apache2/apache2.conf
+        - service: name=apache2 state=started enabled=yes
+    when: ansible_os_family == 'Debian'
+    sudo: yes
+

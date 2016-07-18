@@ -1,0 +1,18 @@
+- name: 使用ufw模块来管理哪些端口需要开启
+  ufw:
+     rule: "{{ item.rule }}"
+     port: "{{ item.port }}"
+     proto: "{{ item.proto }}"
+  with_items:
+     - { rule: 'allow', port: 22, proto: 'tcp' }
+     - { rule: 'allow', port: 80, proto: 'tcp' }
+     - { rule: 'allow', port: 123, proto: 'udp' }
+
+- name: 配置网络进出方向的默认规则
+  ufw:
+     direction: "{{ item.direction }}"
+     policy: "{{ item.policy }}"
+     state: enabled
+  with_items:
+     - { direction: outgoing, policy: allow }
+     - { direction: incoming, policy: deny }

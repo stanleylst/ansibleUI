@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+   - name: "Install Apache"
+     command: yum install --quiet -y httpd httpd-devel
+   - name: "Copy the configuration file"
+     command: cp /tmp/httpd.conf /etc/httpd/conf/httpd.conf
+     command: cp /tmp/httpd-vhosts.conf /etc/httpd/conf/httpd-vhosts.conf
+   - name: "Make sure Apache is started and configure it to run at boot."
+     command: service httpd start
+     command: chkconfig httpd on
+
