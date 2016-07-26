@@ -1,0 +1,14 @@
+{% extends "demo_1/base/base.html" %}
+
+{% load staticfiles %}
+{% block title %}demo_1{% endblock %}
+
+{% block content %}
+{% include "demo_1/pages/demo_test1.html" %}
+{% endblock %}
+
+{% block chosen_js_file %}
+<script type="text/javascript" src="{% static 'js/angular-controller/demo_1/demo_test1_ctrl.js' %}"></script>
+<!-- end -->
+
+{% endblock %}

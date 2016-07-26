@@ -1,0 +1,41 @@
+<div class="col-md-12" ng-controller="demo_upload_ctrl">
+    <div class="form-group col-md-offset-3">
+        <br/>
+        <label class="col-md-3 control-label">请输入要创建的文件:</label>
+        <div class="col-md-4">
+            <input type="text" class="form-control"  ng-model="filename" />
+        </div>
+    </div>
+
+    <div class="col-md-12 column">
+        <div class="col-md-offset-3 column">
+            <div ngf-drop ngf-select ng-model="upload_file" ng-bind="a='文件拖曳至此处或点击我'" class="drop-box2 col-md-12 column"
+             ngf-drag-over-class="dragover" ngf-multiple="false" ngf-allow-dir="true"
+             accept="image/*,application/pdf"></div>
+            <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+            <div class="col-md-12 column">
+                <div ng-if="proc_log">
+                    <h5 class="text-center text-success">((proc_log))</h5>
+                </div>
+                <div ng-show="flag">
+                    <h5 class="text-center text-success">((msg))</h5>
+                </div>
+                <div ng-show="!flag">
+                    <h5 class="text-center text-danger">((msg))</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .drop-box2 {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        width: 70%;
+        height: 100px;
+        padding-top: 25px;
+        margin: 10px;
+    }
+    </style>
+
+</div>

@@ -1,0 +1,115 @@
+<div ng-controller='demo_server_delete_ctrl' class="col-md-12">
+        <div class="row col-md-12">
+            <div class="col-md-3">
+                <button class="btn btn btn-primary col-md-offset-5" ng-click="generate_new_ansible_host_func()">重新生成ansible hosts文件</button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn btn-primary col-md-offset-5" data-toggle="modal" data-target="#servers_operate" ng-click="create_tag('create')">添加服务器列表</button>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr class="info">
+                            <th class="col-md-2 text-muted">主机名称</th>
+                            <th class="col-md-2 text-muted">组名</th>
+                            <th class="col-md-1 text-muted">主机ip</th>
+                            <th class="col-md-1 text-muted">用户名</th>
+                            <th class="col-md-1 text-muted">端口</th>
+                            <th class="col-md-2 text-muted">机器类型</th>
+                            <th class="col-md-3 text-muted">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody dir-paginate="j in servers_list_all | itemsPerPage: 10 track by $index" class="success" pagination-id="servers_list">
+                            <th class="col-md-2 text-muted">((j.name))</th>
+                            <th class="col-md-2 text-muted">((j.group))</th>
+                            <th class="col-md-1 text-muted">((j.ssh_host))</th>
+                            <th class="col-md-1 text-muted">((j.ssh_user))</th>
+                            <th class="col-md-1 text-muted">((j.ssh_port))</th>
+                            <th class="col-md-2 text-muted">((j.server_type))</th>
+                            <th class="col-md-3 text-muted">
+                                <button class="btn btn-primary btn-offset"  data-toggle="modal" data-target="#servers_operate" ng-click="create_tag('remove', j)">删除</button>
+                            </th>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-offset-5">
+                <dir-pagination-controls pagination-id="servers_list"></dir-pagination-controls>
+            </div>
+        </div>
+  <!-- modal: add_servers -->
+                <div class="modal fade" id="servers_operate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width: 1200px; overflow-y: scroll; max-height:95%;  margin-top: 5px; margin-bottom:5px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center text-primary" ng-if="operate_type == 'create'">添加节点</h3>
+                                <h3 class="modal-title text-center text-primary" ng-if="operate_type == 'remove'">删除节点</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <form class='form-horizontal col-md-12'>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-3 control-label text-muted">服务器组:</label>
+                                            <div class="col-md-4">
+                                                <input class="form-control" ng-model="group" placeholder="forexample:group1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">服务器名称:</label>
+                                            <div class="col-md-3">
+                                                <input class="form-control" ng-model="name" placeholder="app-01">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">host(ip):</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="ssh_host" ng-init="ssh_host='xx.xx.xx.xx'">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">用户名:</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="ssh_user" ng-init="ssh_user='user'">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">端口号:</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="ssh_port" ng-init="ssh_port='22'">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">机器类型:</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="server_type" ng-init="server_type='server'">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">comment:</label>
+                                            <div class="col-md-10">
+                                                <textarea rows="2" class="form-control" ng-model="comment"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+
+                                </div>
+                                <div class="col-md-offset-5" ng-if="flag">
+                                    <span>saving ...</span>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="generate_ansible_host_func()" ng-if="operate_type == 'create'">确认添加</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="generate_ansible_host_func()" ng-if="operate_type == 'remove'">确认删除</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+        <!-- modal -->
+</div>

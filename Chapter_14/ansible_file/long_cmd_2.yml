@@ -1,0 +1,6 @@
+- hosts: localhost
+
+  tasks:
+  - name: echo num
+    shell: bash -c "echo 2 > /tmp/long.log;sleep 20"
+

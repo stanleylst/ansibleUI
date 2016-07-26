@@ -1,0 +1,89 @@
+<div class="col-md-12" ng-controller="demo_operate_interface_ctrl">
+    <br/>
+    <div ng-repeat="i in data" class="well col-md-12">
+        <div class="form-group col-md-12" >
+            <label class="col-md-4 control-label text-muted">yml文件名：((i.yml_file))</label>
+            <label class="col-md-2 control-label text-muted">维护人：((i.yml_maintenancer))</label>
+            <label class="col-md-6 control-label text-muted">使用说明：((i.comment))</label>
+        </div>
+        <div class="col-md-12" >
+            <div ng-repeat="j in i.yml_parameter" >
+                <div class="form-group col-md-4" ng-if="j.type == 'choice'">
+                    <label class="col-md-4 control-label text-muted">((j.name)):</label>
+                    <div class="col-md-8">
+                        <select ng-options="o for o in j.values" class="form-control" ng-model="i['operate'][j['name']]" data-toggle="tooltip" data-placement="top" title="((j.comment))">
+                            <option disabled>请选择</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-4" ng-if="j.type == 'string'">
+                    <label class="col-md-4 control-label text-muted">((j.name)):</label>
+                    <div class="col-md-8">
+                        <input class="form-control" ng-model="i['operate'][j['name']]" data-toggle="tooltip" data-placement="top" title="((j.comment))">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <button class="btn btn btn-primary col-md-offset-5" data-toggle="modal" data-target="#check_servers_before_operate" ng-click="fill_data_func(i)" ng-show="!read_flag">开始执行任务</button>
+            <button class="btn btn btn-primary col-md-offset-5" ng-show="read_flag" disabled>开始执行任务</button>
+
+        </div>
+        <br/>
+    </div>
+    <button class="btn btn btn-primary col-md-offset-5" ng-click="revoke_task(task_id)" ng-show="task_id" ng-if="read_flag">停止任务</button>
+
+    <br/>
+    <div class="col-md-12 well" ng-if="ansible_log">
+        <br/>
+        <p class="col-md-offset-4" ng-if="yml_file">执行的yml文件: (( yml_file ))</p>
+        <br/>
+        <p class="col-md-offset-4" ng-if="state">任务状态: (( state ))</p>
+        <br/>
+        <label class="col-md-offset-4 control-label" ng-if="ansible_log">ansible日志:</label>
+        <br/>
+        <textarea class="form-control" rows="20" ng-model="ansible_log" ng-show="ansible_log" id="textscroll"></textarea>
+    </div>
+
+
+
+
+<br/>
+<!-- Modal -->
+    <div class="modal fade" id="check_servers_before_operate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width: 1200px; overflow-y: scroll; max-height:85%;  margin-top: 5px; margin-bottom:5px;">
+            <div class="modal-content">
+                <div class="modal-header" class="col-md-12">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="col-md-offset-6">
+                        <b class="modal-title text-center">请选择机器,并将执行发布</b>
+                    </div>
+                </div>
+                <div class="container">
+                <div class="modal-body" class="col-md-12">
+                    <div class="col-md-12">
+                            <span ng-repeat="j in select_servers" class="col-md-4">
+                                <input type="checkbox" class="css-checkbox" id='select_((j.name))' name="select_((j.name))" ng-model="j.checked" ng-checked="j.checked">
+                                <label for="select_((j.name))" class="css-label"><small>((j.name))</small></label>
+                            </span>
+                            <br/>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <div class="modal-footer col-md-12">
+                    <br/>
+                    <div class="col-md-12">
+                        <div class="col-md-12 text-center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="execute_read()">确认发布</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+</div>

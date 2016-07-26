@@ -1,0 +1,15 @@
+{% extends "demo_2/base/base.html" %}
+
+{% load staticfiles %}
+{% block title %}demo_server_create{% endblock %}
+
+{% block content %}
+{% include "demo_2/pages/demo_server_create.html" %}
+{% endblock %}
+
+{% block chosen_js_file %}
+
+<script type="text/javascript" src="{% static 'js/angular-controller/demo_2/demo_server_create_ctrl.js' %}"></script>
+<!-- end -->
+
+{% endblock %}

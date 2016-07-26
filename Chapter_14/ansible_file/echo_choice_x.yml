@@ -1,0 +1,10 @@
+- hosts: "{{ansible_hosts}}"
+  gather_facts: no
+
+  tasks:
+  - name: echo choice
+    shell: bash -c "echo {{choice}} ;sleep 20"
+    register: echo_choice
+  - debug: var=echo_choice
+    
+

@@ -1,0 +1,144 @@
+<div class="col-md-12" ng-controller="demo_config_center_ctrl">
+        <div class="row col-md-12">
+            <div class="col-md-3">
+                <button class="btn btn btn-primary col-md-offset-5" data-toggle="modal" data-target="#yml_operate" ng-click="create_tag('create')">添加一项yml</button>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr class="info">
+                            <th class="col-md-1 text-muted">id</th>
+                            <th class="col-md-1 text-muted">注册yml文件</th>
+                            <th class="col-md-1 text-muted">host组</th>
+                            <th class="col-md-1 text-muted">维护人</th>
+                            <th class="col-md-1 text-muted">参数列表</th>
+                            <th class="col-md-2 text-muted">说明</th>
+                            <th class="col-md-2 text-muted">注册时间</th>
+                            <th class="col-md-3 text-muted">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody dir-paginate="j in data | itemsPerPage: 10 track by $index" class="success" pagination-id="servers_list" rows="2">
+                            <th class="col-md-1 text-muted">((j.id))</th>
+                            <th class="col-md-1 text-muted">((j.yml_file))</th>
+                            <th class="col-md-1 text-muted">((j.accept_host_group))</th>
+                            <th class="col-md-1 text-muted">((j.yml_maintenancer))</th>
+                            <th class="col-md-3 text-muted">((j.yml_parameter))</th>
+                            <th class="col-md-2 text-muted">((j.comment))</th>
+                            <th class="col-md-2 text-muted">((j.register_time))</th>
+                            <th class="col-md-3 text-muted">
+                                <button class="btn btn-primary btn-offset" data-toggle="modal" data-target="#yml_operate" ng-click="create_tag('modify', j);">修改和查看</button>
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <button class="btn btn-primary btn-offset"  data-toggle="modal" data-target="#yml_operate" ng-click="create_tag('remove', j)">删除</button>
+                            </th>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-offset-5">
+                <dir-pagination-controls pagination-id="servers_list"></dir-pagination-controls>
+            </div>
+        </div>
+  <!-- modal: yml_operate -->
+                <div class="modal fade" id="yml_operate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width: 1200px; overflow-y: scroll; max-height:95%;  margin-top: 5px; margin-bottom:5px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title text-center text-primary" ng-if="operate_type == 'create'">添加yml文件</h3>
+                                <h3 class="modal-title text-center text-primary" ng-if="operate_type == 'remove'">删除yml文件</h3>
+                                <h3 class="modal-title text-center text-primary" ng-if="operate_type == 'modify'">更新yml文件</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <form class='form-horizontal col-md-12'>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">注册yml文件:</label>
+                                            <div class="col-md-10">
+                                                <input class="form-control" ng-model="yml_file">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="col-md-4 control-label text-muted">host组:</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" ng-model="accept_host_group">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="col-md-4 control-label text-muted">维护人:</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" ng-model="yml_maintenancer">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <h5 class="col-md-offset-2" style="cursor: pointer;" ng-click="add_more_parameter_func()">
+                                                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="color: red"></span>添加一项参数
+                                            </h5>
+                                        </div>
+                                        <br/>
+                                        <hr>
+                                        <div ng-repeat="j in yml_parameter">
+                                            <div class="form-group col-md-6" >
+                                                <label class="col-md-4 control-label text-muted">参数名称:</label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control" ng-model="j.name">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4" >
+                                                <label class="col-md-4 control-label text-muted">参数类型:</label>
+                                                <div class="col-md-8">
+                                                    <select ng-options="o for o in ['choice', 'string']" class="form-control" ng-model="j.type">
+                                                        <option disabled>请选择</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2" >
+                                                <button class="btn btn-danger" ng-click="delete_parameter_func(j.id)">
+                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                                                </button>
+                                            </div>
+                                            <div class="form-group col-md-6" >
+                                                <label class="col-md-4 control-label text-muted">参数选项:</label>
+                                                <div class="col-md-8">
+                                                    <textarea rows="2" class="form-control" ng-model="j.values"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6" >
+                                                <label class="col-md-3 control-label text-muted">参数说明:</label>
+                                                <div class="col-md-9">
+                                                    <textarea rows="2" class="form-control" ng-model="j.comment"></textarea>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                        </div>
+                                        <hr>
+                                        <br/>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-md-2 control-label text-muted">yml使用说明:</label>
+                                            <div class="col-md-10">
+                                                <textarea rows="2" class="form-control" ng-model="comment"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+
+                                </div>
+                                <div class="col-md-offset-5" ng-if="flag">
+                                    <span>saving ...</span>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary"  data-dismiss="modal" ng-click="generate_config_func()" ng-if="operate_type == 'create'">确认添加</button>
+                                <button type="button" class="btn btn-primary"  data-dismiss="modal" ng-click="generate_config_func()" ng-if="operate_type == 'modify'">确认更新</button>
+                                <button type="button" class="btn btn-primary"  data-dismiss="modal" ng-click="generate_config_func()" ng-if="operate_type == 'remove'">确认删除</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+        <!-- modal -->
+
+</div>

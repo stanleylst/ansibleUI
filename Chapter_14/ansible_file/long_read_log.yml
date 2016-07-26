@@ -1,0 +1,10 @@
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+  - name: echo num
+    shell: bash -c "echo {{item}};sleep 5"
+    register: echo_num
+    with_sequence: count=3
+  - debug: var=echo_num
+

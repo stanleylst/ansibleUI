@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!DOCTYPE html><html lang="en">
+    <head>  
+        <base href="/">
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title> 
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+        <meta name="description" content="">  
+        <meta name="author" content="">
+        <!--append watch to the browser URL, then refresh the page. -->
+        <link href="{% static 'css/libs/bootstrap.min.css' %}" rel="stylesheet">
+    </head>    
+    <body ng-app="myApp">
+        <div class="container-fluid">
+            <div class="col-md-12 column">
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    
+        <!-- put here load faster -->
+        <!-- here is the main js file that should be load -->
+        <script type="text/javascript" src="{% static 'js/libs/jquery/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/angular/angular.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/bootstrap/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/underscore/Underscore.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/angular/dirPagination.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/libs/angular/ng-file-upload-all.min.js' %}"></script>
+
+        <script type="text/javascript" src="{% static 'js/angular-factory/main.js' %}"></script>
+
+        <!-- here is the other page's js -->
+        {% block chosen_js_file %}{% endblock %}
+    </body>
+</html>

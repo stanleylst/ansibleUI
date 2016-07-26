@@ -1,0 +1,26 @@
+<div class="col-md-12" ng-controller="demo_read_log_ctrl">
+    <br/> 
+    <div class="form-group col-md-offset-4">
+        <label class="col-md-2 control-label text-muted big">输入yml文件名:</label>
+        <div class="col-md-6">
+            <input class="form-control" ng-model="yml_file" ng-init="yml_file='long_read_log.yml'">
+        </div>
+    </div>
+    <div class="row col-md-12">
+        <br />
+        <button class="btn btn btn-primary col-md-offset-5" ng-click="execute_read()" ng-show="!read_flag">开始执行任务</button>
+        <button class="btn btn btn-primary col-md-offset-5" ng-show="read_flag" disabled>开始执行任务</button>
+        <button class="btn btn btn-primary col-md-offset-1" ng-click="revoke_task(task_id)" ng-show="task_id" ng-if="read_flag">停止任务</button>
+    </div>
+    <br/>
+    <div class="col-md-12">
+        <br/>
+        <p class="col-md-offset-4" ng-if="task_id">task_id: (( task_id ))</p>
+        <br/>
+        <p class="col-md-offset-4" ng-if="state">任务状态: (( state ))</p>
+        <br/>
+        <label class="col-md-offset-4 control-label" ng-if="ansible_log">ansible日志:</label>
+        <br/>
+        <textarea class="form-control" rows="20" ng-model="ansible_log" ng-show="ansible_log" id="textscroll"></textarea>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div ng-controller='demo_server_create_ctrl' class="col-md-12">
+        <div class="row col-md-12">
+            <div class="col-md-3">
+                <button class="btn btn btn-primary col-md-offset-5" ng-click="generate_new_ansible_host_func()">重新生成ansible hosts文件</button>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr class="info">
+                            <th class="col-md-2 text-muted">主机名称</th>
+                            <th class="col-md-2 text-muted">组名</th>
+                            <th class="col-md-1 text-muted">主机ip</th>
+                            <th class="col-md-1 text-muted">用户名</th>
+                            <th class="col-md-1 text-muted">端口</th>
+                            <th class="col-md-2 text-muted">机器类型</th>
+                        </tr>
+                    </thead>
+                    <tbody dir-paginate="j in servers_list_all | itemsPerPage: 10 track by $index" class="success" pagination-id="servers_list">
+                            <th class="col-md-2 text-muted">((j.name))</th>
+                            <th class="col-md-2 text-muted">((j.group))</th>
+                            <th class="col-md-1 text-muted">((j.ssh_host))</th>
+                            <th class="col-md-1 text-muted">((j.ssh_user))</th>
+                            <th class="col-md-1 text-muted">((j.ssh_port))</th>
+                            <th class="col-md-2 text-muted">((j.server_type))</th>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-offset-5">
+                <dir-pagination-controls pagination-id="servers_list"></dir-pagination-controls>
+            </div>
+        </div>
+
+
+
+</div>
