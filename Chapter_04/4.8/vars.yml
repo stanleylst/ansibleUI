@@ -1,11 +1,11 @@
 ---
-# 中文测试The directory into which Solr will be downloaded for setup.
+# 软件包下载路径
 download_dir: /tmp
+# Tomcat版本号
 tomcat_version: 8.0.35
+# Tomcat安装路径
 tomcat_dir: /opt/tomcat
-
-# The directory inside which Solr will be installed.
+# Solr安装路径
 solr_dir: /opt/solr
-
-# Solr version and download information.
+# Solr版本号（最新版）
 solr_version: 6.1.0

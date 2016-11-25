@@ -1,7 +1,7 @@
 ---
 - hosts: web
   tasks:
-    # Install and configure Apache on RedHat/CentOS hosts.
+    # 在RedHat/CentOS系统上的执行操作
     - block:
         - yum: name=httpd state=present
         - template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
@@ -9,11 +9,10 @@
     when: ansible_os_family == 'RedHat'
     sudo: yes
 
-    # Install and configure Apache on Debian/Ubuntu hosts.
+    # 在Debian/Ubuntu系统上的操作
     - block:
         - apt: name=apache2 state=present
         - template: src=httpd.conf.j2 dest=/etc/apache2/apache2.conf
         - service: name=apache2 state=started enabled=yes
     when: ansible_os_family == 'Debian'
     sudo: yes
-

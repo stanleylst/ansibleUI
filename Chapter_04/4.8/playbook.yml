@@ -5,78 +5,78 @@
     - vars.yml
 
   handlers:
-    - name: restart tomcat
+    - name: 重启Tomcat
       command: >
         initctl restart tomcat
 
-    - name: Install JDK.
+    - name: 发送JDK软件包和java配置文件到远程主机
       copy: "src={{ item.src }} dest={{ item.dest }}"
       with_items:
         - src: "./jdk-8u11-linux-x64.tar.gz"
           dest: "/tmp/"
-       
+
         - src: "./java.sh"
           dest: "/etc/profile.d/"
 
-    - name: Create JAVA directory
+    - name: 创建java安装目录
       command: >
         mkdir -p /opt/java
 
-    - name: expand JDK.
+    - name: 解压JDK软件包
       command: >
         tar -C /opt/java -xvf {{ download_dir}}/jdk-8u11-linux-x64.tar.gz --strip-components=1
-   
-    - name: Update alternatives for java.
+
+    - name: 为java命令更新alternatives
       command: >
         update-alternatives --install /usr/bin/java java /opt/java/bin/java 300
 
-    - name: Update alternatives for javac.
+    - name: 为javac更新alternatives
       command: >
         update-alternatives --install /usr/bin/javac javac /opt/java/bin/javac 300
 
-    - name: Create Tomcat directory
+    - name: 创建Tomcat安装目录
       command: >
         mkdir -p {{ tomcat_dir }}
 
-    - name: Add Tomcat user
+    - name: : 添加运行Tomcat所需的变通用户tomcat
       user: "name=tomcat shell=/sbin/nologin"
 
-    - name: Download Tomcat.
+    - name: 下载Tomcat软件包
       get_url:
         url: "http://apache.fayea.com/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version}}.tar.gz"
         dest: "{{ download_dir }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
 
-    - name: Expand Tomcat.
+    - name: 解压缩Tomcat软件包
       command: >
         tar -C {{ tomcat_dir}} -xvf {{ download_dir }}/apache-tomcat-{{ tomcat_version }}.tar.gz --strip-components=1
         creates={{ tomcat_dir }}/conf/server.xml
 
-    - name: Rload Upstart Configuration
-      command: initctl reload-configuration
-
-    - name: Transfer Upstart Configuration of Tomcat. 
+    - name: 发送Tomcat的Upstart配置文件到远程主机
       copy: "src=./tomcat.conf  dest=/etc/init/tomcat.conf"
       notify: restart tomcat
 
-    - name: Download Solr.
+    - name: 重新加载Upstart配置
+      command: initctl reload-configuration
+
+    - name: 下载新版Solr软件包
       get_url:
         url: "http://apache.fayea.com/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz"
         dest: "{{ download_dir }}/solr-{{ solr_version }}.tgz"
 
-    - name: Move Solr into place
+    - name: 创建Solr安装目录
       command: >
         mkdir -p {{ solr_dir }}
 
-    - name: Expand Solr.
+    - name: 解压缩Solr软件包到安装目录
       command: >
         tar -C {{ solr_dir }} -xvzf {{ download_dir }}/solr-{{ solr_version }}.tgz --strip-components=1
         creates={{ solr_dir }}/dist/solr-core-{{ solr_version }}.jar
 
-    - name: Move Solr into place
+    - name: 确保Solr所需的目录存在
       command: >
         mkdir -p {{ tomcat_dir }}/webapps/solr/WEB-INF/classes
 
-    - name: Move Solr components into place.
+    - name: 将Solr文件部署到指定Tomcat目录中
       shell: >
         rsync -av {{ item.src }} {{ item.dest }}
         creates={{ item.creates }}
@@ -84,7 +84,7 @@
         - src: "{{ solr_dir }}/server/solr-webapp/webapp/*"
           dest: "{{ tomcat_dir }}/webapps/solr"
           creates: "/opt/tomcat/webapps/solr/index.html"
- 
+
         - src: "{{ solr_dir }}/server/lib/ext/*"
           dest: "{{ tomcat_dir }}/webapps/solr/WEB-INF/lib/"
           creates: "/opt/tomcat/webapps/solr/WEB-INF/lib/slf4j-api-1.7.7.jar"
@@ -93,10 +93,10 @@
           dest: "{{ tomcat_dir }}/webapps/solr/WEB-INF/classes/"
           creates: "/opt/tomcat/webapps/solr/WEB-INF/classes/log4j.properties"
 
-    - name: Overwrite Solr configure file
+    - name: 覆盖Solr配置文件
       copy: "src=./web.xml dest=/opt/tomcat/webapps/solr/WEB-INF/web.xml"
 
-    - name: Changem permission
+    - name: 修改Solr和Tomcat安装目录下的文件权限，并启动Tomcat
       file:
         path: "/opt"
         owner: tomcat

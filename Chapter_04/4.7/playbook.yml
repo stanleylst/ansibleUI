@@ -5,24 +5,24 @@
     - vars.yml
 
   pre_tasks:
-    - name: Update apt cache if needed.
+    - name: 更新apt缓存
       apt: update_cache=yes cache_valid_time=3600
 
   handlers:
-    - name: restart apache
+    - name: 重启Apache
       service: name=apache2 state=restarted
 
   tasks:
-    - name: Get software for apt repository management.
+    - name: 安装用来管理ATP源的工具
       apt: "name={{ item }} state=present"
       with_items:
         - python-apt
         - python-pycurl
 
-    - name: Add ondrej repository for later versions of PHP.
+    - name: 添加包含有5.5版本PHP的ondrej源
       apt_repository: repo='ppa:ondrej/php5-5.6' update_cache=yes
 
-    - name: "Install Apache, MySQL, PHP, and other dependencies."
+    - name: 安装Apache，MySQL，PHP以及依赖关系
       apt: "name={{ item }} state=present"
       with_items:
         - git
@@ -42,20 +42,20 @@
         - python-mysqldb
         - mysql-server
 
-    - name: Disable the firewall (since this is for local dev only).
+    - name: 关闭防火墙（因为本项目仅供本地开发使用）
       service: name=ufw state=stopped
 
-    - name: "Start Apache, MySQL, and PHP."
+    - name: "启动Apache，MySQL"
       service: "name={{ item }} state=started enabled=yes"
       with_items:
         - apache2
         - mysql
 
-    - name: Enable Apache rewrite module (required for Drupal).
+    - name: 启用Apache的rewrite模块(Drupal需要这个模块).
       apache2_module: name=rewrite state=present
       notify: restart apache
 
-    - name: Add Apache virtualhost for Drupal 8 development.
+    - name: 在Apache中为Drupal添加virtualhost
       template:
         src: "templates/drupal.dev.conf.j2"
         dest: "/etc/apache2/sites-available/{{ domain }}.dev.conf"
@@ -64,20 +64,20 @@
         mode: 0644
       notify: restart apache
 
-    - name: Symlink Drupal virtualhost to sites-enabled.
+    - name: 在sites-enabled目录中添加Drupal所需配置文件的符号链接
       file:
         src: "/etc/apache2/sites-available/{{ domain }}.dev.conf"
         dest: "/etc/apache2/sites-enabled/{{ domain }}.dev.conf"
         state: link
       notify: restart apache
 
-    - name: Remove default virtualhost file.
+    - name: 删除默认的virtualhost配置文件
       file:
         path: "/etc/apache2/sites-enabled/000-default"
         state: absent
       notify: restart apache
 
-    - name: Enable upload progress via APC.
+    - name: 开启PHP上传功能
       lineinfile:
         dest: "/etc/php5/apache2/conf.d/20-apcu.ini"
         regexp: "^apc.rfc1867"
@@ -85,59 +85,59 @@
         state: present
       notify: restart apache
 
-    - name: Remove the MySQL test database.
+    - name: 删除test数据库
       mysql_db: db=test state=absent
 
-    - name: Create a database for Drupal.
+    - name: 为Drupal创建新库
       mysql_db: "db={{ domain }} state=present"
 
-    - name: Download Composer installer.
+    - name: 下载Composer安装脚本
       get_url:
         url: https://getcomposer.org/installer
         dest: /tmp/composer-installer.php
         mode: 0755
 
-    - name: Run Composer installer.
+    - name: 运行Composer安装脚本
       command: >
         php composer-installer.php
         chdir=/tmp
         creates=/usr/local/bin/composer
 
-    - name: Move Composer into globally-accessible location.
+    - name: 将Composer放入/usr/local/bin目录中供全局使用
       shell: >
         mv /tmp/composer.phar /usr/local/bin/composer
         creates=/usr/local/bin/composer
 
-    - name: Check out drush master branch.
+    - name: 从Github中下载Drush代码
       git:
         repo: https://github.com/drush-ops/drush.git
         dest: /opt/drush
 
-    - name: Install Drush dependencies with Composer.
+    - name: 使用Composer安装Drush
       shell: >
         /usr/local/bin/composer install
         chdir=/opt/drush
         creates=/opt/drush/vendor/autoload.php
 
-    - name: Create drush bin symlink.
+    - name: 创建Drush命令的符号链接
       file:
         src: /opt/drush/drush
         dest: /usr/local/bin/drush
         state: link
 
-    - name: Check out Drupal Core to the Apache docroot.
+    - name: 下载Drupal代码到Apache的DocumentRoot目录中
       git:
         repo: http://git.drupal.org/project/drupal.git
         version: "{{ drupal_core_version }}"
         dest: "{{ drupal_core_path }}"
 
-    - name: Install Drupal dependencies with Composer.
+    - name: 使用Comoser安装Drupal的依赖关系
       shell: >
         /usr/local/bin/composer install
         chdir={{ drupal_core_path }}
         creates={{ drupal_core_path }}/sites/default/settings.php
 
-    - name: Install Drupal.
+    - name: 安装Drupal
       command: >
         drush si -y --site-name="{{ drupal_site_name }}"
         --account-name=admin
@@ -147,13 +147,12 @@
         creates={{ drupal_core_path }}/sites/default/settings.php
       notify: restart apache
 
-    # SEE: https://drupal.org/node/2121849#comment-8413637
-    - name: Set permissions properly on settings.php.
+    - name: 为settings.php设置正确的权限
       file:
         path: "{{ drupal_core_path }}/sites/default/settings.php"
         mode: 0744
 
-    - name: Set permissions properly on files directory.
+    - name: 开放files目录的所有权限
       file:
         path: "{{ drupal_core_path }}/sites/default/files"
         mode: 0777
