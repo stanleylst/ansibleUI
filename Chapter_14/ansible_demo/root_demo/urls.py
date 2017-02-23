@@ -17,9 +17,6 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': settings.MEDIA_ROOT}),
 
-    url(r'^demo_1/', include('demo_1.urls',
-                            namespace='demo_1')),
-
     url(r'^demo_2/', include('demo_2.urls',
                             namespace='demo_2')),
 
