@@ -31,7 +31,7 @@ app.controller('demo_upload_ctrl', function($scope, $http, Upload){
     };
 
     $scope.filename = '';
-    $scope.$watch('upload_file', function () {
+    $scope.$watchCollection('upload_file', function () {
         $scope.para = {'saved_file_name': $scope.filename}
         goupload('/demo_2/demo2_api/file_upload/');
     },true);
