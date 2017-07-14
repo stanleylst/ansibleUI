@@ -1,0 +1,25 @@
+file: site-packages/ansible/utils/display.py
+------------------------------
+log_add = []    
+log_file = []   
+
+class Display:   # not add
+------------------------------
+
+            else:                           # not add
+                logger.info(msg2)           # not add
+            if msg2.find('before assignment') == -1:        
+                ansi_escape = re.compile(r'\x1b[^m]*m')     
+                msg3 = ansi_escape.sub('', msg2)
+            else:
+                msg3 = ''
+            try:
+                log_add.append(msg3)
+            except:
+                pass
+            if log_file:
+                with open(log_file[0], 'a+') as f:
+                    f.write(msg3)
+
+    def v(self, msg, host=None):                         # not add
+        return self.verbose(msg, host=host, caplevel=0)  # not add
