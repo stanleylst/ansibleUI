@@ -7,4 +7,3 @@
     register: echo_num
     with_sequence: count=3
   - debug: var=echo_num
-
