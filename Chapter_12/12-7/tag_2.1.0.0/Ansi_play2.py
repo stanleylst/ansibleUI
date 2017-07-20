@@ -63,7 +63,6 @@ class Ansi_Play2(object):
                         passwords={},
                         check=False):
         self.playbook = playbook
-        self.extra_vars = extra_vars
         self.passwords = passwords
         Options = namedtuple('Options',
                    ['listtags', 'listtasks', 'listhosts', 'syntax', 'connection','module_path',
@@ -81,6 +80,7 @@ class Ansi_Play2(object):
         if ansible_cfg != None:
             os.environ["ANSIBLE_CONFIG"] = ansible_cfg
         self.variable_manager = VariableManager()
+        self.variable_manager.extra_vars = extra_vars
         self.loader = DataLoader()
         self.inventory = Inventory(loader=self.loader, variable_manager=self.variable_manager,  host_list=host_list)
     
