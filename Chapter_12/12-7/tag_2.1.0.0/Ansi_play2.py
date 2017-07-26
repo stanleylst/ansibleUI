@@ -37,12 +37,20 @@ class ResultCallback(CallbackBase):
         del_keys = [key for key in result.keys() if key.startswith('_')]
         del_keys += ['invocation']
         for key in del_keys:
-            del result[key]
+            if key in result:
+                del result[key]
         if host not in self.msg_list:
             self.msg_list[host] = {'msg': [], 'status': status}
         if self.msg_list[host]['status'] in ['ok']:
             self.msg_list[host]['status'] = status
-        self.msg_list[host]['msg'].append(result['stdout'] + result['stderr'])
+        msg = ''
+        if 'stdout' in result:
+            msg += result['stdout'] + '\n'
+        if 'stderr' in result:
+            msg += result['stderr'] + '\n'
+        if 'msg' in result:
+            msg += result['msg']
+        self.msg_list[host]['msg'].append(msg)
         return result
    
     def v2_runner_on_ok(self, result):
