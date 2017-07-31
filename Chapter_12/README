@@ -1,1 +1,9 @@
 第12章 Ansible模块编写 
+
+## 如何使用ansible2.x的api
+请查看ansibleUI/Chapter_12/12-7/tag_2.1.0.0/目录
+对用想使用ansible api来编写的同学们需要注意
+
+    * 请结合celery进行编写，它将会把ansible任务放入后台，刷新页面时不会中断ansible程序
+    * 对于ansible和celery之间使用的进程报错问题，请在命令行执行export PYTHONOPTIMIZE=1
+    * 如果需要使用Ansi_play2.py的run方法，请根据ansible_source_change.txt修改ansible源码
