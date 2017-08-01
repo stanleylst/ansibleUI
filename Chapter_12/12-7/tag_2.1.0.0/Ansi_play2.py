@@ -72,7 +72,9 @@ class ResultCallback(CallbackBase):
         self.runner_on_unreachable(host, result._result)
         if host not in self.unreachable:
             self.unreachable[host] = []
+        print(self.unreachable)
         self.unreachable[host].append(self.deal_result(result._result, host, 'unreachable'))
+
 
     def v2_playbook_on_play_start(self, play):
         self.playbook_on_play_start(play.name)
@@ -84,7 +86,7 @@ class ResultCallback(CallbackBase):
 
 class Ansi_Play2(object):
 
-    def __init__(self, playbook, extra_vars={}, 
+    def __init__(self, playbook='', extra_vars={},
                         host_list='/etc/ansible/hosts', 
                         connection='ssh',
                         become=False,
@@ -117,6 +119,10 @@ class Ansi_Play2(object):
         self.inventory = Inventory(loader=self.loader, variable_manager=self.variable_manager,  host_list=host_list)
     
     def run(self, log):
+        if not self.playbook:
+            code = 999
+            simple = 'playbook must exist'
+            return code, simple, None
         if log:
             log_file.append(log)
         if not os.path.exists(self.playbook):
@@ -133,26 +139,35 @@ class Ansi_Play2(object):
             code = pbex.run()
         except AnsibleParserError:
             code = 1001
-            result = 'syntax problems in ' + self.playbook
+            results = 'syntax problems in ' + self.playbook
             return  code, results, None
         stats = pbex._tqm._stats
         hosts = sorted(stats.processed.keys())
         results = [{h: stats.summarize(h)} for h in hosts]
         if not results:
             code = 1002
-            result = 'no host executed in ' + self.playbook
+            results = 'no host executed in ' + self.playbook
             return  code, results, None
         complex = '\n'.join(log_add)
         return code, results, complex
 
-    def play(self, hosts='localhost', module='setup'):
+    def run_module(self, hosts='localhost', rules=[{'module': 'setup'}]):
+        '''
+        rules=[
+              {'module': 'shell', 'args': 'echo "ok"', 'register': 'echo_ok'},
+              {'module': 'debug', 'args': {'msg': '{{echo_ok.stdout}}'}}
+        ]
+        '''
+        tasks = []
+        for rule in rules:
+            if 'register' in rule:
+                register = rule.pop('register')
+            tasks.append(dict(dict(action=rule), register=register))
         play_source =  dict(
             name = "Ansible Play",
             hosts = 'localhost',
             gather_facts = 'no',
-            tasks = [
-                dict(action=dict(module='setup'))
-             ]
+            tasks = tasks
         )
         results_callback = ResultCallback()
         play = Play().load(play_source, variable_manager=self.variable_manager, loader=self.loader)
@@ -166,14 +181,17 @@ class Ansi_Play2(object):
                   passwords=self.passwords,
                   stdout_callback=results_callback,
              )
-            result = tqm.run(play)
+            tqm.run(play)
             return results_callback
         finally:
             if tqm is not None:
                 tqm.cleanup()
 
-
     def run_need_data(self):
+        if not self.playbook:
+            code = 999
+            simple = 'playbook must exist'
+            return code, simple, None
         if not os.path.exists(self.playbook):
             code = 1000
             complex = {'playbook': self.playbook, 
@@ -192,15 +210,16 @@ class Ansi_Play2(object):
             code = pbex.run()
         except AnsibleParserError:
             code = 1001
-            complex = {'playbook': self.playbook, 
-                      'msg': 'syntax problems in ' + self.playbook, 'flag': False}
-            simple = 'syntax problems in ' + self.playbook
+            simple = {'playbook': self.playbook,
+                      'msg': 'syntax problems in ' + self.playbook, 'flag': False,
+                      'msg_list': {'status': 'unknown', 'msg': 'syntax problems'}}
+            complex = 'syntax problems in ' + self.playbook
             return code, simple, complex
         if results_callback.no_hosts:
             code = 1002
             complex = 'no hosts matched in ' + self.playbook
             simple = {'executed': False, 'flag': False, 'playbook': self.playbook,
-                      'msg': 'no_hosts'}
+                      'msg': 'no_hosts', 'msg_list': {'status': 'unknown', 'msg': 'no_hosts'}}
             return code, simple, complex
         else:
             msg_list = results_callback.msg_list
@@ -242,3 +261,11 @@ if __name__ == '__main__':
     # log_file: '/tmp/aa.log'
     #complex = book2.play()   #  get simple result about playbook, and log detail in log_file
     #print(complex.ok, complex.fail)
+
+    book_m2 = Ansi_Play2()
+    rules=[
+        {'module': 'shell', 'args': 'echo "ok"', 'register': 'echo_ok'},
+        {'module': 'debug', 'args': {'msg': '{{echo_ok.stdout}}'}}
+    ]
+    data = book_m2.run_module('localhost', rules)
+    print(data.ok)
