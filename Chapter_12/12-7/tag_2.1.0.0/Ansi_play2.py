@@ -165,7 +165,7 @@ class Ansi_Play2(object):
             tasks.append(dict(dict(action=rule), register=register))
         play_source =  dict(
             name = "Ansible Play",
-            hosts = 'localhost',
+            hosts = hosts,
             gather_facts = 'no',
             tasks = tasks
         )
