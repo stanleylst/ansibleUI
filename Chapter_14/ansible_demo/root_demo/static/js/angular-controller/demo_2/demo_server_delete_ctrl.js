@@ -24,7 +24,7 @@ app.controller('demo_server_delete_ctrl',function($scope, $http){
     $scope.create_tag = function(tag, ins){
         $scope.operate_type = tag;
         if(tag == 'remove'){
-            $scope.remove_id = ins.id;
+            $scope.id = ins.id;
             $scope.group = ins.group,
             $scope.name = ins.name,
             $scope.ssh_host = ins.ssh_host,
